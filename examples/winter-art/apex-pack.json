@@ -1,0 +1,20 @@
+{
+  "format": "apex-pack",
+  "manifestVersion": 2,
+  "id": "hello-kit-winter",
+  "name": "Hello kit: winter",
+  "version": "1.0.0",
+  "description": "A snowy backdrop and cold colours for Hello kit.",
+  "author": { "name": "Apex examples" },
+  "contributes": {
+    "assets": [
+      {
+        "id": "winter",
+        "name": "Winter",
+        "for": { "pack": "hello-kit", "app": "main", "slot": "art" },
+        "root": "winter"
+      }
+    ]
+  },
+  "permissions": {}
+}

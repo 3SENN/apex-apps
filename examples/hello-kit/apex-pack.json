@@ -1,0 +1,34 @@
+{
+  "format": "apex-pack",
+  "manifestVersion": 2,
+  "id": "hello-kit",
+  "name": "Hello kit",
+  "version": "1.0.0",
+  "description": "Your companion on a little stage, drawn with the Apex kit. Say hi and it cheers up.",
+  "author": { "name": "Apex examples" },
+  "contributes": {
+    "apps": [
+      {
+        "id": "main",
+        "name": "Hello kit",
+        "root": "app",
+        "entry": "index.html",
+        "build": "kit",
+        "kit": 1,
+        "kind": "game",
+        "icon": "icon.svg",
+        "sidebar": true,
+        "cast": { "min": 1, "max": 1 },
+        "assets": [
+          {
+            "id": "art",
+            "name": "Art",
+            "description": "backdrop.svg (the picture behind the stage) and palette.json (the floor and light colours).",
+            "layout": "app/art"
+          }
+        ]
+      }
+    ]
+  },
+  "permissions": {}
+}

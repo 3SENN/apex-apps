@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Contoso dashboard</title>
+<link rel="stylesheet" href="./style.css">
+<script type="module" src="./main.js"></script>
+</head>
+<body>
+<main>
+  <header>
+    <h1 id="title">Contoso dashboard</h1>
+    <p id="who" role="status" aria-live="polite">Checking your sign-in…</p>
+    <div class="buttons">
+      <button id="sign-in" type="button" hidden>Sign in with your Contoso account</button>
+      <button id="sign-out" type="button" class="quiet" hidden>Sign out</button>
+    </div>
+  </header>
+
+  <section aria-labelledby="tasks-title">
+    <h2 id="tasks-title">Your open tasks</h2>
+    <p id="tasks-status" role="status" aria-live="polite"></p>
+    <button id="tasks-retry" type="button" class="quiet" hidden>Try again</button>
+    <ul id="tasks"></ul>
+  </section>
+
+  <section aria-labelledby="jira-title">
+    <h2 id="jira-title">Search Jira</h2>
+    <p id="jira-status" role="status" aria-live="polite">Checking your connectors…</p>
+    <button id="connect" type="button" class="quiet" hidden>Connect Jira and Confluence…</button>
+    <form id="search" hidden>
+      <label for="query">Search</label>
+      <input id="query" autocomplete="off">
+      <button type="submit">Search</button>
+    </form>
+    <pre id="results"></pre>
+  </section>
+</main>
+</body>
+</html>

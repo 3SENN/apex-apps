@@ -1,0 +1,23 @@
+{
+  "format": "apex-pack",
+  "manifestVersion": 2,
+  "id": "vite-tally",
+  "name": "Tally",
+  "version": "1.0.0",
+  "description": "A tally counter built with Vite. Count anything; it remembers.",
+  "author": { "name": "Apex examples" },
+  "contributes": {
+    "apps": [
+      {
+        "id": "main",
+        "name": "Tally",
+        "root": "dist",
+        "entry": "index.html",
+        "build": "bundled",
+        "kind": "tool",
+        "sidebar": true
+      }
+    ]
+  },
+  "permissions": {}
+}

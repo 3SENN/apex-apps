@@ -1,0 +1,103 @@
+{
+  "format": "apex-world",
+  "version": 1,
+  "id": "riverside",
+  "name": "Riverside",
+  "description": "A small town by a river: an arcade corner, a market square with a fountain, and a jetty with boats for hire.",
+  "palette": "meadow",
+  "sky": "morning",
+  "size": [24, 18],
+  "ground": {
+    "base": "grass",
+    "paint": [
+      { "type": "path", "area": [0, 8, 23, 9] },
+      { "type": "floor", "area": [2, 2, 7, 6] },
+      { "type": "stone", "area": [10, 2, 16, 6] },
+      { "type": "path", "area": [12, 7, 14, 7] },
+      { "type": "sand", "area": [0, 12, 23, 13] },
+      { "type": "water", "area": [0, 14, 23, 17] },
+      { "type": "boards", "area": [15, 12, 17, 17] }
+    ]
+  },
+  "props": [
+    { "kit": "shop", "at": [4.5, 0, 2.5] },
+    { "kit": "table", "at": [3.5, 0, 5.5] },
+    { "kit": "chair", "at": [2.8, 0, 5.5], "turn": 90 },
+    { "kit": "chair", "at": [4.2, 0, 5.5], "turn": 270 },
+    { "kit": "sign", "at": [7.5, 0, 7], "tint": { "accent": "#6b5bff" } },
+    { "kit": "flowers", "at": [2.5, 0, 7] },
+    { "kit": "flowers", "at": [6.5, 0, 7] },
+
+    { "kit": "fountain", "at": [13.5, 0, 4] },
+    { "kit": "stall", "at": [11, 0, 3], "turn": 90 },
+    { "kit": "stall", "at": [16, 0, 3], "turn": 270, "tint": { "accent": "#ff8a5c" } },
+    { "kit": "bench", "at": [12.5, 0, 6.4] },
+    { "kit": "bench", "at": [14.5, 0, 6.4] },
+    { "kit": "lamp", "at": [9.6, 0, 7.4] },
+    { "kit": "lamp", "at": [17.4, 0, 7.4] },
+
+    { "kit": "house", "at": [20.5, 0, 3.5] },
+    { "kit": "fence", "at": [19, 0, 6.6] },
+    { "kit": "fence", "at": [21, 0, 6.6] },
+
+    { "kit": "tree", "at": [1, 0, 1] },
+    { "kit": "tree", "at": [8.5, 0, 1] },
+    { "kit": "tree", "at": [18, 0, 1] },
+    { "kit": "tree", "at": [22.5, 0, 6] },
+    { "kit": "tree", "at": [1, 0, 11] },
+    { "kit": "tree", "at": [11, 0, 11.5] },
+    { "kit": "pine", "at": [23, 0, 1.5] },
+    { "kit": "pine", "at": [6, 0, 11.5] },
+    { "kit": "bush", "at": [9, 0, 5] },
+    { "kit": "bush", "at": [19, 0, 11] },
+    { "kit": "rock", "at": [3, 0, 13] },
+    { "kit": "rock", "at": [21.5, 0, 13] },
+    { "kit": "umbrella", "at": [8, 0, 13], "tint": { "accent": "#ff6f61" } },
+
+    { "kit": "crate", "at": [15.3, 0, 12.6] },
+    { "kit": "barrel", "at": [17.6, 0, 12.6] },
+    { "kit": "lamp", "at": [17.6, 0, 16.6] }
+  ],
+  "places": [
+    { "id": "arcade", "name": "Arcade corner", "area": [2, 2, 7, 6], "opens": { "pack": "hello-kit", "app": "main" } },
+    { "id": "square", "name": "Market square", "area": [10, 2, 16, 6] },
+    { "id": "jetty", "name": "The jetty", "area": [15, 12, 17, 17] }
+  ],
+  "residents": [
+    {
+      "id": "juniper",
+      "home": "square",
+      "at": [13.5, 5.5],
+      "role": "Sells apples at the market",
+      "guest": {
+        "name": "Juniper",
+        "look": {
+          "rig": "A",
+          "parts": { "head": "head-round", "ears": null, "hair": "hair-curls", "hat": null, "eyeAccessory": null, "earAccessory": "earring-hoop", "prop": null },
+          "face": { "eyes": "eyes-round", "brows": "brows-soft", "mouth": "mouth-smile" },
+          "colors": { "skin": "#f2c9a0", "hair": "#4a2f27", "accent": "#ffd166", "outfit": "#5b9e6f" }
+        },
+        "personality": "Cheerful and practical. Knows every apple by taste, gives fair weight, and likes to hear where people are headed."
+      }
+    },
+    {
+      "id": "otto",
+      "home": "jetty",
+      "at": [16, 15],
+      "role": "Rents out rowing boats",
+      "guest": {
+        "name": "Otto",
+        "look": {
+          "rig": "B",
+          "parts": { "head": "head-soft-square", "ears": null, "hair": "hair-tuft", "hat": null, "eyeAccessory": "glasses-square", "earAccessory": null, "prop": null },
+          "face": { "eyes": "eyes-oval", "brows": "brows-bold", "mouth": "mouth-small" },
+          "colors": { "skin": "#c98f6b", "hair": "#d9d4cc", "accent": "#7fc8f8", "outfit": "#2f5d8a" }
+        },
+        "personality": "Slow to speak and quick to laugh. Checks the weather twice before every trip and keeps a spare oar for anyone who forgets theirs."
+      }
+    },
+    { "id": "visitor", "home": "arcade", "at": [4.5, 6], "role": "Plays in the arcade", "companion": "local" }
+  ],
+  "spawn": [12, 9],
+  "camera": { "at": [12, 16, 30], "lookAt": [12, 0, 8] }
+}

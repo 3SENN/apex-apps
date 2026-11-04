@@ -1,0 +1,38 @@
+{
+  "format": "apex-pack",
+  "manifestVersion": 2,
+  "id": "contoso-dashboard",
+  "name": "Contoso dashboard",
+  "version": "1.0.0",
+  "description": "Your open tasks from the Contoso API, and a search of your Jira, signed in with your Contoso account.",
+  "author": { "name": "Contoso IT" },
+  "contributes": {
+    "apps": [
+      {
+        "id": "main",
+        "name": "Contoso dashboard",
+        "build": "kit",
+        "kind": "tool",
+        "sidebar": true
+      }
+    ]
+  },
+  "permissions": {
+    "network": ["api.contoso.example"],
+    "connectors": ["atlassian"]
+  },
+  "env": {
+    "API_URL": "https://api.contoso.example",
+    "TEAM": ""
+  },
+  "auth": [
+    {
+      "id": "corp",
+      "name": "Contoso account",
+      "issuer": "https://login.contoso.example",
+      "clientId": "contoso-dashboard",
+      "scopes": ["openid", "email", "tasks.read"],
+      "hosts": ["api.contoso.example"]
+    }
+  ]
+}

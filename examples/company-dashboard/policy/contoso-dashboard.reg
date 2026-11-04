@@ -1,0 +1,8 @@
+Windows Registry Editor Version 5.00
+
+; Contoso dashboard for every user of this computer (HKLM). Same values as policies.json.
+; Each policy is one value under the key: lists and objects as JSON text (REG_SZ).
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Apex]
+"PackForceInstall"="[{\"url\":\"https://apps.contoso.example/contoso-dashboard-1.0.0.apexapp\"}]"
+"AppConfig"="{\"contoso-dashboard\":{\"env\":{\"API_URL\":\"https://api.contoso.example/eu\",\"TEAM\":\"Operations\"},\"auth\":{\"corp\":{\"issuer\":\"https://login.contoso.example/eu\",\"clientId\":\"contoso-dashboard-eu\",\"scopes\":[\"openid\",\"email\",\"offline_access\",\"tasks.read\"]}}}}"

@@ -1,0 +1,24 @@
+{
+  "format": "apex-pack",
+  "manifestVersion": 2,
+  "id": "notes-tool",
+  "name": "Notes tool",
+  "version": "1.0.0",
+  "description": "Open a text file, get a title and its key points, and save them as Markdown.",
+  "author": { "name": "Apex examples" },
+  "contributes": {
+    "apps": [
+      {
+        "id": "main",
+        "name": "Notes tool",
+        "build": "kit",
+        "kind": "tool",
+        "sidebar": true
+      }
+    ]
+  },
+  "permissions": {
+    "model": true,
+    "files": true
+  }
+}

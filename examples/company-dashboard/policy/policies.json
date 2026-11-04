@@ -1,0 +1,20 @@
+{
+  "PackForceInstall": [
+    { "url": "https://apps.contoso.example/contoso-dashboard-1.0.0.apexapp" }
+  ],
+  "AppConfig": {
+    "contoso-dashboard": {
+      "env": {
+        "API_URL": "https://api.contoso.example/eu",
+        "TEAM": "Operations"
+      },
+      "auth": {
+        "corp": {
+          "issuer": "https://login.contoso.example/eu",
+          "clientId": "contoso-dashboard-eu",
+          "scopes": ["openid", "email", "offline_access", "tasks.read"]
+        }
+      }
+    }
+  }
+}

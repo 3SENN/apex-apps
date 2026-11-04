@@ -1,0 +1,10 @@
+node_modules/
+dist/
+*.pem
+.env
+.env.local
+*.apexapp
+*.apexpack
+*.apexworld
+.DS_Store
+Thumbs.db

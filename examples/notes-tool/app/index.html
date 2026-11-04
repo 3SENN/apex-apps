@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Notes tool</title>
+<link rel="stylesheet" href="./style.css">
+<script type="module" src="./main.js"></script>
+</head>
+<body>
+<main>
+  <h1>Notes tool</h1>
+  <label for="source">Text to make notes on</label>
+  <textarea id="source" placeholder="Paste text here, or open a file."></textarea>
+  <div class="buttons">
+    <button id="open" type="button" class="quiet">Open a file…</button>
+    <button id="make" type="button">Make notes</button>
+    <button id="save" type="button" class="quiet" disabled>Save as Markdown…</button>
+  </div>
+  <p id="status" role="status" aria-live="polite"></p>
+  <section id="result" aria-label="Notes"></section>
+</main>
+</body>
+</html>

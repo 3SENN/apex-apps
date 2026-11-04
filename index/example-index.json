@@ -1,0 +1,48 @@
+{
+  "format": "apex-pack-index",
+  "name": "Example index",
+  "packs": [
+    {
+      "id": "hello-kit",
+      "name": "Hello kit",
+      "description": "Your companion on a little stage, drawn with the Apex kit. Say hi and it cheers up.",
+      "version": "1.0.0",
+      "url": "https://packs.example.com/hello-kit-1.0.0.apexapp",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "author": "Apex examples",
+      "kind": "app",
+      "image": "https://packs.example.com/hello-kit-1.0.0.png",
+      "category": "games",
+      "size": 6144,
+      "color": "#6b5bff"
+    },
+    {
+      "id": "hello-kit-winter",
+      "name": "Hello kit: winter",
+      "description": "A snowy backdrop and cold colours for Hello kit.",
+      "version": "1.0.0",
+      "url": "https://packs.example.com/hello-kit-winter-1.0.0.apexpack",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "author": "Apex examples",
+      "kind": "pack",
+      "category": "creative",
+      "size": 2048
+    },
+    {
+      "id": "riverside",
+      "name": "Riverside",
+      "description": "A small town by a river: a market square, a jetty and an arcade corner that opens Hello kit.",
+      "version": "1.0.0",
+      "url": "https://downloads.example.com/riverside/v1.0.0/riverside-1.0.0.apexworld",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "author": "Apex examples",
+      "kind": "world",
+      "category": "worlds",
+      "size": 3072,
+      "color": "#9fd8a8"
+    }
+  ],
+  "withdrawn": [
+    { "id": "old-tally", "reason": "Replaced by vite-tally." }
+  ]
+}

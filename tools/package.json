@@ -1,0 +1,13 @@
+{
+  "name": "apex-pack-tools",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Build, sign and index Apex packs outside Apex.",
+  "type": "module",
+  "dependencies": {
+    "fflate": "0.8.3"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

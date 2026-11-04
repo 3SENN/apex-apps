@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Server notes</title>
+<link rel="stylesheet" href="./style.css">
+<script type="module" src="./main.js"></script>
+</head>
+<body>
+<main>
+  <h1>Server notes</h1>
+  <p class="token"><span id="token-state">Checking your token…</span> <button id="token" type="button" class="quiet" hidden>Add your token…</button></p>
+  <form id="add">
+    <label for="text">New note</label>
+    <input id="text" name="text" maxlength="500" autocomplete="off">
+    <button type="submit">Add</button>
+  </form>
+  <p id="status" role="status" aria-live="polite"></p>
+  <button id="retry" type="button" class="quiet" hidden>Try again</button>
+  <ul id="notes" aria-label="Your notes"></ul>
+</main>
+</body>
+</html>

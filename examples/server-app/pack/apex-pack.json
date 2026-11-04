@@ -1,0 +1,36 @@
+{
+  "format": "apex-pack",
+  "manifestVersion": 2,
+  "id": "server-notes",
+  "name": "Server notes",
+  "version": "1.0.0",
+  "description": "Your notes from your Contoso Notes account: read them and add new ones.",
+  "author": { "name": "Apex examples" },
+  "contributes": {
+    "apps": [
+      {
+        "id": "main",
+        "name": "Server notes",
+        "build": "kit",
+        "kind": "tool",
+        "sidebar": true
+      }
+    ]
+  },
+  "permissions": {
+    "network": ["notes.contoso.example"]
+  },
+  "secrets": [
+    {
+      "id": "NOTES_TOKEN",
+      "name": "Contoso Notes token",
+      "description": "From notes.contoso.example › Settings › Tokens.",
+      "hosts": ["notes.contoso.example"],
+      "header": "Authorization",
+      "prefix": "Bearer "
+    }
+  ],
+  "env": {
+    "SERVER_URL": "https://notes.contoso.example"
+  }
+}
