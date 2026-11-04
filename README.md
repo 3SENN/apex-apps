@@ -48,8 +48,8 @@ own. More in [docs/getting-started.md](docs/getting-started.md).
 - **A link.** `apex://packs?install=<https address of the file>`, or Packs ›
   **Install from link…**.
 - **An index.** An https JSON file that lists packs with their SHA-256. Browse
-  shows every index the person added; Apex starts with the Apex community
-  index. Build your own with [`tools/make-index.mjs`](tools).
+  shows every index the person added, and offers the Apex community index
+  when there is none. Build your own with [`tools/make-index.mjs`](tools).
 
 Sign every version with the same key: Apex pins a pack to the key that signed
 its first install. See [docs/sharing-and-the-index.md](docs/sharing-and-the-index.md).

@@ -205,9 +205,10 @@ Add its id to `withdrawn`, with a short reason:
 
 ## The Apex community index
 
-Apex starts with one index, the Apex community index
-(`https://raw.githubusercontent.com/3SENN/apex-packs/main/index.json`); people
-can remove it on Browse and add others. Items are added by pull request. The
+Browse offers the Apex community index
+(`https://raw.githubusercontent.com/3SENN/apex-packs/main/index.json`) when a
+person has no index yet; they add it with one click, can remove it, and can
+add others. Items are added by pull request. The
 index pins each author's key and checks every request: signatures and pins,
 hashes, Apex's file rules, and that the sources match the packs.
 

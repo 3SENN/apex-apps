@@ -184,7 +184,9 @@ What Apex does:
 - Adds `Authorization: Bearer <access token>` to the app's requests to the
   sign-in's `hosts` (fetch, WebSocket handshakes, images, `apex.fetch`), and
   takes it off a request to any other host.
-- `user` is the name, username or email from the ID token.
+- `user` is the email, username or name from the ID token (the first it has).
+- Call `signIn` from a click. If the person closes the sign-in tab, asking
+  again within ten seconds is refused, so an app never reopens it in a loop.
 
 What you register at the provider:
 

@@ -53,8 +53,8 @@ A secret or sign-in for a host goes on these requests automatically (below).
 |---|---|---|
 | `apex.secrets.status()` | `secrets` in the manifest | `{ NAME: true \| false }`: whether each secret has a value. Never the value. |
 | `apex.secrets.request(NAME)` | that secret | Opens the pack's page at that key so the person can enter it. Resolves `{ set: true }` once they save it, or `{ set: false }` after ten minutes. |
-| `apex.auth.status()` | `auth` in the manifest | `{ id: { signedIn, user } }`. `user` is the name, username or email from the ID token, or `null`. Never a token. |
-| `apex.auth.signIn(id)` | that sign-in | Opens the identity provider in a tab. Resolves `{ signedIn, user }` once the person is signed in; rejects if they cancel or it fails. |
+| `apex.auth.status()` | `auth` in the manifest | `{ id: { signedIn, user } }`. `user` is the email, username or name from the ID token (the first it has), or `null`. Never a token. |
+| `apex.auth.signIn(id)` | that sign-in | Opens the identity provider in a tab. Resolves `{ signedIn, user }` once the person is signed in; rejects if they cancel or it fails. After a cancel, asking again within ten seconds is refused, so call it from a click. |
 | `apex.auth.signOut(id)` | that sign-in | Forgets the tokens on this computer. |
 
 See [servers-keys-and-sign-in.md](servers-keys-and-sign-in.md).

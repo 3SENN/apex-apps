@@ -81,8 +81,8 @@ Windows Registry Editor Version 5.00
 
 - Up to 20 https addresses. Each entry is an address, or an object
   `{ "url", "name", "auth" }` (below).
-- The list replaces Apex's default. To keep the Apex community index, list it
-  as above.
+- The list is the whole of Browse: people can't add or remove indexes. To
+  offer the Apex community index too, list it as above.
 
 ### A private index
 
@@ -182,7 +182,8 @@ Windows Registry Editor Version 5.00
 ## PackTrustedKeys
 
 Your organisation's signing keys. Packs signed with them are allowed,
-whatever the allow and block lists say.
+whatever the allow and block lists say, and their review says "Signed by your
+organisation".
 
 ```json
 {
@@ -287,8 +288,8 @@ Windows Registry Editor Version 5.00
   ten minutes), and each connector call (connector and tool).
 - People can't clear the log. **Save log…** on the pack's page writes it to a
   file as JSON lines.
-- The log keeps the last 500 lines per pack. Collect it if you need a longer
-  record.
+- Under this policy the log keeps the last 20,000 lines per pack (500
+  without it). Collect it if you need a longer record.
 
 ## AppConfig
 
