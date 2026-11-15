@@ -1,13 +1,14 @@
-# Building for Apex
+# Make things for Apex
 
-Apex is a browser with AI companions built in. You extend it with **packs**:
-a folder with an `apex-pack.json` manifest and the files it names. This
-repository is a practical guide to building packs well: apps, games, tools,
-worlds and art, with examples that pass Apex's own checks.
+Apex is the browser you make your own. In Apex you can describe a tool and
+your companion builds it. This repository is for building one yourself:
+apps, games, tools, worlds and art, packed so anyone can add them to their
+browser with one yes.
 
-Nothing here needs a backend or an SDK. A pack is plain web files plus a
-manifest, and everything it can reach is written in that manifest and shown
-to the person before they install it.
+A pack is a folder: an `apex-pack.json` manifest and the files it names.
+Nothing here needs a backend or an SDK. Everything a pack can reach is written
+in its manifest and shown to the person before they install it. The guides
+and examples here pass Apex's own checks.
 
 ## What you can build
 
@@ -26,7 +27,7 @@ Packs can also add panels beside the page, tools for the companion, new tab
 cards, commands, page menu items, skills and services for other packs. See
 [docs/manifest.md](docs/manifest.md).
 
-## Five minutes
+## Your first pack in five minutes
 
 1. Copy [`examples/hello-kit`](examples/hello-kit) somewhere of your own.
 2. In Apex, open the Packs page (`apex://packs`) and choose
@@ -39,7 +40,7 @@ A loaded folder runs in place: no copy, no signature, no build step for a kit
 app. Change the `id` in `apex-pack.json` before you build something of your
 own. More in [docs/getting-started.md](docs/getting-started.md).
 
-## Share it
+## Share what you made
 
 - **A file.** A pack travels as one signed zip: `.apexapp` for a pack with an
   app, `.apexworld` for one that holds only worlds, `.apexpack` for anything
@@ -53,6 +54,10 @@ own. More in [docs/getting-started.md](docs/getting-started.md).
 
 Sign every version with the same key: Apex pins a pack to the key that signed
 its first install. See [docs/sharing-and-the-index.md](docs/sharing-and-the-index.md).
+
+The [Apex community index](https://github.com/3SENN/apex-packs) takes
+`.apexpack` files by pull request today. Share apps and worlds as a file, a
+link or an index of your own.
 
 ## Docs
 
@@ -93,3 +98,7 @@ community index (its addresses and hashes are made up).
 ## Licence
 
 [MIT](LICENSE).
+
+---
+
+[apexbrowser.eu](https://apexbrowser.eu) · [How packs work](https://apexbrowser.eu/packs.html)
