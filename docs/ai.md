@@ -65,6 +65,44 @@ session.close()
 Limits: prompt up to 50,000 characters, `system` up to 8,000, `maxTokens` 1 to
 8,000 (default 2,000).
 
+## Quick decisions: `decide`
+
+`decide` answers typed questions about a piece of text with probabilities and
+writes no text. Use it to sort, route or score things, where a written reply
+would be wasted.
+
+```js
+const { answers, source } = await apex.ai.decide(message, {
+  topic: {
+    type: 'choice',
+    instructions: 'What is this message about?',
+    criteria: { billing: 'Payments, invoices, refunds', bug: 'Something is broken', other: null },
+  },
+  urgency: { type: 'score', instructions: 'How soon does it need an answer?', criteria: ['Can wait', 'Today', 'Right now'] },
+  angry: { type: 'noul', instructions: 'Is the writer upset?' },
+})
+// Claude's own estimates are less calibrated than a decision model's: ask for more.
+const sure = source === 'model' ? 0.75 : 0.85
+const topic = answers.topic.probabilities[answers.topic.choice] >= sure ? answers.topic.choice : null
+```
+
+- `state` is text up to 24,000 characters, or a JSON object.
+- Up to 20 questions per call, keyed by a name like `topic`. Each has
+  `instructions` (up to 1,000 characters) and a `type`:
+  - `noul`: yes or no. The answer is `{ noul }`, the probability of yes.
+    `criteria` may say what `true` and `false` mean.
+  - `choice`: one of 2 to 64 options. `criteria` maps each option to a
+    description (or `null`). The answer is `{ choice, confidence,
+    probabilities }`.
+  - `score`: a level on a scale of 2 to 10 steps, `criteria` naming each
+    step. The answer is `{ score, confidence, probabilities }`.
+- `source` is `"model"` when the person's decision model answered (Settings ›
+  Quick decisions, in about a tenth of a second), or `"claude"` when their
+  Claude engine did. Act only when an answer is sure, and treat Claude's
+  answers more strictly.
+- On a decision model, `decide` has its own budget: 600 calls an hour and
+  5,000 a day. On Claude, each call counts against the model budget below.
+
 `apex.ask(prompt, { system })` is the older one-shot call (prompt up to 20,000
 characters). It counts the same way; prefer `apex.ai` in new code.
 
@@ -88,8 +126,8 @@ again, never a blank screen.
 
 In Apex's playtest (`test_pack`, which companions use when they build or
 remix your app), model calls return stand-ins unless an installed version of
-the pack may already use the model: `ai.json` returns `null`, the others a
-short text. Check what you get before you use it.
+the pack may already use the model: `ai.json` and `ai.decide` return `null`,
+the others a short text. Check what you get before you use it.
 
 ## Organisations
 

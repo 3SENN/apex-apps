@@ -10,6 +10,14 @@ Nothing here needs a backend or an SDK. Everything a pack can reach is written
 in its manifest and shown to the person before they install it. The guides
 and examples here pass Apex's own checks.
 
+New to Apex? Start with [how it works](docs/how-it-works.md): where a pack
+runs, what it can reach, how it shows up in the browser and how it travels.
+
+| Repository | For |
+|---|---|
+| **apex-apps** (this one) | Building packs: guides, working examples and the packing tools. |
+| [apex-packs](https://github.com/3SENN/apex-packs) | The Apex community index: finished packs, signed and reviewed in the open. Apex lists it on Packs › Browse. |
+
 ## What you can build
 
 | You want | Use | Example |
@@ -19,6 +27,7 @@ and examples here pass Apex's own checks.
 | An app that uses the person's AI | `apex.ai` on the person's own engine: no API key in your app | [notes-tool](examples/notes-tool) |
 | The person's companions as characters | the **cast** and the **Apex kit** (three.js plus the companion runtime) | [hello-kit](examples/hello-kit) |
 | An app on your own server, or the person's own accounts | `network`, `secrets`, `env` and `auth` | [server-app](examples/server-app), [company-dashboard](examples/company-dashboard) |
+| Phones as controllers, a second screen, local multiplayer | `apex.server`: a small server the app runs, on this computer or the Wi-Fi | [api.md](docs/api.md#a-server-on-this-computer-apps) |
 | A place to walk around in | a **world**: JSON with kit props, residents and places that open apps | [world](examples/world) |
 | New art or sound for someone's app | an **asset pack** that fills one of the app's slots | [winter-art](examples/winter-art) |
 | A tool for your company | an app with sign-in and connectors, deployed by policy | [company-dashboard](examples/company-dashboard), [organisations](docs/organisations.md) |
@@ -49,8 +58,9 @@ own. More in [docs/getting-started.md](docs/getting-started.md).
 - **A link.** `apex://packs?install=<https address of the file>`, or Packs ›
   **Install from link…**.
 - **An index.** An https JSON file that lists packs with their SHA-256. Browse
-  shows every index the person added, and offers the Apex community index
-  when there is none. Build your own with [`tools/make-index.mjs`](tools).
+  shows every index the person added. Apex adds the Apex community index on
+  first run, and offers it again if the person removed every index. Build your
+  own with [`tools/make-index.mjs`](tools).
 
 Sign every version with the same key: Apex pins a pack to the key that signed
 its first install. See [docs/sharing-and-the-index.md](docs/sharing-and-the-index.md).
@@ -63,11 +73,12 @@ link or an index of your own.
 
 | | |
 |---|---|
+| [how-it-works.md](docs/how-it-works.md) | The map: the sandbox, the bridge and the network gate, where packs show up, how they travel |
 | [getting-started.md](docs/getting-started.md) | A first app, how loading a folder works, debugging |
 | [manifest.md](docs/manifest.md) | Every field of `apex-pack.json`, with types, defaults, rules and limits |
-| [api.md](docs/api.md) | `window.apex`: every call that works today |
+| [api.md](docs/api.md) | `window.apex`: every call that works today, including a server for phones on the Wi-Fi |
 | [kit-and-cast.md](docs/kit-and-cast.md) | The Apex kit (three.js, companions, props) and the cast |
-| [ai.md](docs/ai.md) | `apex.ai`: tiers, JSON, streaming, sessions with tools, the budget |
+| [ai.md](docs/ai.md) | `apex.ai`: tiers, JSON, streaming, sessions with tools, quick decisions, the budget |
 | [servers-keys-and-sign-in.md](docs/servers-keys-and-sign-in.md) | Your own servers, CORS, `secrets`, `env`, `.env` while you develop, OAuth sign-in |
 | [connectors.md](docs/connectors.md) | The person's connectors (Jira, GitHub, Notion…) from an app |
 | [worlds.md](docs/worlds.md) | The world file format |

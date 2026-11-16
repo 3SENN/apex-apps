@@ -205,12 +205,17 @@ Add its id to `withdrawn`, with a short reason:
 
 ## The Apex community index
 
-Browse offers the Apex community index
-(`https://raw.githubusercontent.com/3SENN/apex-packs/main/index.json`) when a
-person has no index yet; they add it with one click, can remove it, and can
-add others. Items are added by pull request. The
-index pins each author's key and checks every request: signatures and pins,
-hashes, Apex's file rules, and that the sources match the packs.
+Apex adds the Apex community index
+(`https://raw.githubusercontent.com/3SENN/apex-packs/main/index.json`) on
+first run. A person can remove it and add others; if they remove every index,
+Browse offers it again with one click. Items are added by pull request to
+[apex-packs](https://github.com/3SENN/apex-packs). The index pins each
+author's key and checks every request: signatures and pins, hashes, Apex's
+file rules, and that the sources match the packs.
+
+Today it takes `.apexpack` files, hosted in the repository. Apps
+(`.apexapp`) and worlds (`.apexworld`) aren't listed there yet: share them as
+a file, a link or an index of your own.
 
 What you may share there:
 
@@ -222,6 +227,33 @@ Not assets taken from someone else's game, and not other games' or
 companies' characters, names or logos. A project that started from someone
 else's game can ship its code and ask players for their own copy's files
 (`apex.files.own`).
+
+## Sharing a companion
+
+A companion is made in Apex (Settings › Companions), not by hand. It travels
+two ways:
+
+| | A companion file | A pack with the companion |
+|---|---|---|
+| Made with | **Export…** on the companion's card | **Share as pack…** on the companion's menu in Settings › Companions, then **Export…** on the draft |
+| File | `.apexcompanion`: plain JSON, not signed | `.apexpack`: signed with your key |
+| Carries | Its name, look, personality, standing instructions, model and effort; its own skills and routines if you choose; its memory only if you choose | The same, never its memory |
+| For | One person you trust | Anyone: a link, an index, the community index |
+
+Either way, the person sees a review before the companion is added: its
+look, its personality and its standing instructions (up to 4,000
+characters, which go into the system prompt of its chats). Routines it brings
+are added paused.
+
+Before you share one:
+
+- Leave memory out. It is what the companion learned about you.
+- Read its standing instructions and each of its skills as a stranger would.
+  They are instructions the assistant follows in that person's browser, so
+  they say what the companion is like and what it helps with, and nothing
+  else.
+- To share it publicly, share it as a pack. A pack is signed, so updates
+  can only come from you.
 
 ## Organisations
 

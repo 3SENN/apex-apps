@@ -118,11 +118,12 @@ All optional. What a pack doesn't list, it can't do.
 | `worlds` | boolean | `false` | `apex.worlds.*`: lists, reads, changes and opens the person's worlds. |
 | `connectors` | list (up to 10) | `[]` | The person's connectors this pack's apps use, by directory id (`atlassian`, `github`) or a server's name: `^[a-z0-9][a-z0-9-]{0,63}$`, no duplicates. |
 | `pageScripts` | boolean | `false` | Boost scripts. Needs at least one boost with `js`. |
+| `server` | `{}` or `{ "lan": true }` | none | `apex.server.*`: a small web server the app's own page runs. `{}` for this computer only; `{ "lan": true }` for phones and computers on the same Wi-Fi too (a warning line on the review; an update that adds it asks again). Needs an app. See [api.md](api.md#a-server-on-this-computer-apps). |
 
 Least privilege is enforced: `network`, `model`, `notifications`,
 `clipboard`, `files`, `worlds`, `connectors`, `secrets`, `auth` and
 `optionalPermissions` need code that can use them (a panel, an app, a tool or
-a card).
+a card), and `server` needs an app.
 
 ### Host rules
 
@@ -146,8 +147,8 @@ What the pack may ask for while it runs, one feature at a time, with
 | `model` | boolean |
 | `clipboard` | boolean |
 
-Entries already in `permissions` are dropped. `files`, `speak`, `worlds` and
-`connectors` can't be optional.
+Entries already in `permissions` are dropped. `files`, `speak`, `worlds`,
+`connectors` and `server` can't be optional.
 
 ## `secrets`
 
