@@ -170,7 +170,9 @@ Paths stay inside the folder: no `..`, nothing absolute. See
 With `permissions.server`, an app's own page can run a small web server that
 other devices open: phones as game controllers, a second screen, local
 multiplayer, a tool a colleague opens on the same Wi-Fi. Apex runs the server.
-Your page only sees the requests and messages that passed Apex's checks.
+Your page only sees the requests and messages that passed Apex's checks. The
+[phone-controller](../examples/phone-controller) example turns phones into
+controllers this way.
 
 | Call | Needs | Returns |
 |---|---|---|

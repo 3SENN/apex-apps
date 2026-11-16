@@ -1,0 +1,4 @@
+/* Apex UI (linked first) brings the tokens, Inter and the ax-* components; this file adds only what this app needs. */
+html, body { height: 100%; }
+.sorted { margin: 0; padding-left: var(--space-5); line-height: 1.6; overflow-wrap: anywhere; }
+.sorted:empty { display: none; }

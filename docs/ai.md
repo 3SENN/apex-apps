@@ -103,6 +103,8 @@ const topic = answers.topic.probabilities[answers.topic.choice] >= sure ? answer
 - On a decision model, `decide` has its own budget: 600 calls an hour and
   5,000 a day. On Claude, each call counts against the model budget below.
 
+The [sorter](../examples/sorter) example sorts messages this way.
+
 `apex.ask(prompt, { system })` is the older one-shot call (prompt up to 20,000
 characters). It counts the same way; prefer `apex.ai` in new code.
 

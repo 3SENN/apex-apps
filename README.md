@@ -27,7 +27,7 @@ runs, what it can reach, how it shows up in the browser and how it travels.
 | An app that uses the person's AI | `apex.ai` on the person's own engine: no API key in your app | [notes-tool](examples/notes-tool) |
 | The person's companions as characters | the **cast** and the **Apex kit** (three.js plus the companion runtime) | [hello-kit](examples/hello-kit) |
 | An app on your own server, or the person's own accounts | `network`, `secrets`, `env` and `auth` | [server-app](examples/server-app), [company-dashboard](examples/company-dashboard) |
-| Phones as controllers, a second screen, local multiplayer | `apex.server`: a small server the app runs, on this computer or the Wi-Fi | [api.md](docs/api.md#a-server-on-this-computer-apps) |
+| Phones as controllers, a second screen, local multiplayer | `apex.server`: a small server the app runs, on this computer or the Wi-Fi | [phone-controller](examples/phone-controller) |
 | A place to walk around in | a **world**: JSON with kit props, residents and places that open apps | [world](examples/world) |
 | New art or sound for someone's app | an **asset pack** that fills one of the app's slots | [winter-art](examples/winter-art) |
 | A tool for your company | an app with sign-in and connectors, deployed by policy | [company-dashboard](examples/company-dashboard), [organisations](docs/organisations.md) |
@@ -97,6 +97,8 @@ Every example passes Apex's manifest checks (`vite-app` once it is built).
 |---|---|
 | [hello-kit](examples/hello-kit) | Kit app: the person's companion drawn with `apex-kit/character.js`, an asset slot, the test hook |
 | [notes-tool](examples/notes-tool) | Tool app: `apex.ai.json` and `apex.files` |
+| [sorter](examples/sorter) | Tool app: `apex.ai.decide` quick decisions that act only when sure |
+| [phone-controller](examples/phone-controller) | Phones on the same Wi-Fi scan a QR code and become controllers: `apex.server` with `lan` |
 | [vite-app](examples/vite-app) | Bundled app built with Vite |
 | [server-app](examples/server-app) | Own server: `network`, a secret, `env`, `.env.example`, a local server with CORS |
 | [company-dashboard](examples/company-dashboard) | OAuth sign-in, connectors, `env`, and the policy that deploys it |
