@@ -66,8 +66,10 @@ your Wi-Fi can open" and "Adds an app: Phone controller".
   changes: reload the app and scan the new code.
 - It also stops after 15 minutes with no request and no socket.
 - A socket takes up to 120 messages a second. Past that Apex drops messages,
-  and closes a socket that keeps going. `phone.js` sends motion and pointer
-  moves at most 60 times a second each.
+  and closes a socket that keeps going. A dropped button release would leave
+  that button held down, so `phone.js` gives motion and pointer moves 90
+  messages a second between them (`mayStream`), and presses and releases
+  always fit.
 - Up to 16 phones at once by default; `maxConnections` takes up to 32.
 
 ## Files

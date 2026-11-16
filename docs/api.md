@@ -227,8 +227,12 @@ Rules:
   server in its Host header, and a page's Origin must be the server's own, so
   other sites can't drive your app.
 - Messages are text; objects go as JSON. 16 KB a message in, 64 KB out, 120
-  messages a second per socket (enough for motion at 60 Hz). 60 requests a
-  second, bodies up to 64 KB, answers up to 2 MB within 10 s.
+  messages a second per socket. 60 requests a second, bodies up to 64 KB,
+  answers up to 2 MB within 10 s.
+- Past 120 a second, Apex drops messages, the next button press or release
+  among them. Keep streams such as motion and pointer moves to about 90 a
+  second between them, so presses and releases always fit. The phone example
+  shows how.
 - It lives as long as the page that started it. Closing, reloading or leaving
   the page stops it, and so do turning the pack off, `stop()`, Stop on Apex's
   bar and 15 minutes with no request and no socket. The tab doesn't sleep
