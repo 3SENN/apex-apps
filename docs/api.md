@@ -78,11 +78,14 @@ See [connectors.md](connectors.md).
 | `apex.ai.json(prompt, { schema, system, tier, maxTokens })` | `permissions.model` | A value that fits the JSON Schema (checked, asked again once). |
 | `apex.ai.stream(prompt, { onText, system, tier, maxTokens })` | `permissions.model` | Calls `onText(piece)` as the reply arrives; resolves to the whole reply. |
 | `apex.ai.session({ system, tier, tools })` | `permissions.model` | A conversation: `send(text)` resolves to the reply, `history()`, `close()`. Tools are `{ name, description, input, run(input) }` and run in your page. |
+| `apex.ai.decide(state, questions)` | `permissions.model` | Typed answers with probabilities and no text: `{ answers, source, model, ms }`. Questions are yes or no (`noul`), one of 2 to 64 options (`choice`) or a level on 2 to 10 steps (`score`). |
 | `apex.ask(prompt, { system })` | `permissions.model` | The older one-shot call (prompt up to 20,000 characters, system 4,000). Prefer `apex.ai`. |
 
 `tier` is `"fast"` (the default) or `"smart"`. Prompts up to 50,000 characters,
 `system` up to 8,000, `maxTokens` 1 to 8,000 (default 2,000). Every model call
-counts toward the pack's budget: 60 an hour and 500 a day. See [ai.md](ai.md).
+counts toward the pack's budget: 60 an hour and 500 a day. `decide` has its
+own budget (600 an hour, 5,000 a day) when the person has a decision model on.
+See [ai.md](ai.md).
 
 ## The cast
 
@@ -161,6 +164,81 @@ Paths stay inside the folder: no `..`, nothing absolute. See
 |---|---|---|
 | `apex.status.set({ text, badge, progress })` | *apps* | Shows on the app's sidebar row and tab while the app is open. `text` up to 40 characters, `badge` an integer 0 to 999, `progress` 0 to 1; `null` clears one. |
 | `apex.status.clear()` | *apps* | |
+
+## A server on this computer (apps)
+
+With `permissions.server`, an app's own page can run a small web server that
+other devices open: phones as game controllers, a second screen, local
+multiplayer, a tool a colleague opens on the same Wi-Fi. Apex runs the server.
+Your page only sees the requests and messages that passed Apex's checks.
+
+| Call | Needs | Returns |
+|---|---|---|
+| `apex.server.start({ lan, root, token, maxConnections })` | *apps*; `permissions.server` | Starts the server, or tells you about the running one: `{ running, url, lanUrl, port, qr, lan, token, connections }`. `lan: true` (with `"lan": true` in the manifest) opens it to the Wi-Fi. `root` is the pack folder it serves. `token: false` serves at `/` instead of under an unguessable token. `maxConnections` up to 32 (default 16). `qr` is an image data URL of `lanUrl` to show in your page. |
+| `apex.server.stop()`, `apex.server.status()` | the same | Stops it; what runs now. |
+| `apex.server.onRequest(async (req) => …)` | the same | Answers requests that no file in `root` answers. `req` is `{ method, path, query, headers, body, json }`. Return text, `{ status, headers, body }`, or any value to send as JSON. |
+| `apex.server.onConnection((socket) => …)` | the same | A served page opened a socket: `socket.id`, `socket.query`, `socket.remote` (`"local"` or `"lan"`), `socket.send(data)`, `socket.close(code)`, `socket.onMessage((value, text) => …)`, `socket.onClose((code) => …)`. |
+| `apex.server.broadcast(data)`, `apex.server.sockets()` | the same | Sends to every socket; the sockets open now. |
+| `apex.server.onStop((reason) => …)` | the same | `"stopped"` (your `stop()`), `"person"` (Stop on Apex's bar), `"idle"` or `"closed"` (the page or the pack went away). |
+
+```js
+// In the app
+const s = await apex.server.start({ lan: true, root: 'phone' })
+qr.src = s.qr                 // show it, with s.lanUrl as text
+apex.server.onConnection((socket) => {
+  socket.onMessage((msg) => move(socket.id, msg))
+  socket.onClose(() => leave(socket.id))
+})
+```
+
+```html
+<!-- phone/index.html, served to the phone -->
+<script src="__apex/client.js"></script>
+<script src="phone.js" defer></script>
+```
+
+```js
+// phone/phone.js
+const link = apexServer.connect({ query: { name: 'Sam' } })
+link.onMessage((value) => buzz(value))
+button.addEventListener('click', () => link.send({ t: 'tap' }))
+```
+
+What it serves, under `/<token>/`:
+
+- the `root` folder of your pack as it is: a folder serves its `index.html`,
+  nothing is listed, nothing outside it is reached;
+- `__apex/client.js`: `apexServer.connect({ query })` gives `send`, `onOpen`,
+  `onMessage`, `onClose` and `close`, and reconnects by itself;
+- `__apex/socket`: the WebSocket to your app's page;
+- `__apex/kit/…`: Apex UI and the kit, so served pages can look like Apex;
+- anything else goes to `onRequest` (404 without a handler).
+
+Rules:
+
+- Without `lan` it listens on this computer only, over http. With `lan` it
+  listens on the Wi-Fi over https with Apex's own certificate. A phone warns
+  about the certificate once (tell people to go on); phones give motion
+  sensors only to secure pages. On a Mac, macOS asks once whether Apex may
+  accept incoming connections: tell people to choose Allow.
+- Only this computer and private networks get in. A request must name this
+  server in its Host header, and a page's Origin must be the server's own, so
+  other sites can't drive your app.
+- Messages are text; objects go as JSON. 16 KB a message in, 64 KB out, 120
+  messages a second per socket (enough for motion at 60 Hz). 60 requests a
+  second, bodies up to 64 KB, answers up to 2 MB within 10 s.
+- It lives as long as the page that started it. Closing, reloading or leaving
+  the page stops it, and so do turning the pack off, `stop()`, Stop on Apex's
+  bar and 15 minutes with no request and no socket. The tab doesn't sleep
+  while it runs.
+- While it runs, Apex draws its own bar over your app's tab: that the app is
+  sharing on the Wi-Fi (or running a server on this computer), how many are
+  connected, and Stop. Your app can't draw over it.
+- The token stays the same while Apex runs, so phones reconnect after your
+  app reloads. It is new when Apex starts, and thrown away when the person
+  presses Stop. The port is kept per app, so a bookmark keeps working.
+- In a playtest the server runs on this computer only: start with `lan`, and
+  if that fails, start without it.
 
 ## Services and events
 
