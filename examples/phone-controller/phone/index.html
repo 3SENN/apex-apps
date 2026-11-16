@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="color-scheme" content="light dark">
+<title>Controller</title>
+<link rel="stylesheet" href="__apex/kit/1/apex-kit/ui.css">
+<link rel="stylesheet" href="phone.css">
+<script src="__apex/client.js"></script>
+<script src="phone.js" defer></script>
+</head>
+<body>
+<main id="join" class="screen ax-stack">
+  <h1 class="ax-title" data-t="title">Controller</h1>
+  <label class="ax-label" for="name" data-t="name">Your name</label>
+  <input class="ax-input" id="name" maxlength="20" autocomplete="nickname">
+  <button class="ax-btn ax-btn--accent ax-btn--lg ax-btn--full" id="go" type="button" data-t="join">Join</button>
+</main>
+<main id="pad" class="screen" hidden>
+  <p class="status ax-small" id="status" role="status"></p>
+  <button class="ax-btn ax-btn--full" id="motion" type="button" data-t="motion">Allow motion</button>
+  <button class="key a" id="a" type="button">A</button>
+  <div class="row">
+    <button class="key b" id="b" type="button">B</button>
+    <button class="key home" id="home" type="button" data-t="home">Home</button>
+  </div>
+  <div class="touch" id="touch" data-t="touch">Pointer</div>
+</main>
+</body>
+</html>

@@ -1,0 +1,21 @@
+/* The phone page, on Apex UI's tokens: a big A, B and Home below it, a pad to point with. Portrait or landscape. */
+html, body { height: 100%; margin: 0; overscroll-behavior: none; touch-action: manipulation; -webkit-user-select: none; user-select: none; }
+body { padding: max(var(--space-4), env(safe-area-inset-top)) max(var(--space-4), env(safe-area-inset-right)) max(var(--space-4), env(safe-area-inset-bottom)) max(var(--space-4), env(safe-area-inset-left)); box-sizing: border-box; background: var(--bg-page); color: var(--text-primary); font-family: var(--font); }
+.screen { max-width: 30rem; height: 100%; margin: 0 auto; box-sizing: border-box; }
+#join { justify-content: center; }
+#pad { display: grid; grid-template-rows: auto auto 1fr auto auto; gap: var(--space-3); }
+#pad[hidden] { display: none; }
+.status { margin: 0; text-align: center; color: var(--text-secondary); }
+.key { border: 0; border-radius: var(--radius-lg); background: var(--bg-raised); color: var(--text-primary); box-shadow: var(--shadow-md); font: 700 var(--text-xl) var(--font); }
+.key:active, .key.down { background: var(--accent); color: var(--text-on-accent); box-shadow: none; }
+.a { min-height: 9rem; border-radius: 50%; aspect-ratio: 1; justify-self: center; width: min(60vw, 14rem); font-size: 3rem; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); }
+.row .key { min-height: 4rem; }
+.touch { display: grid; min-height: 7rem; place-items: center; border-radius: var(--radius-lg); background: var(--bg-sunken); color: var(--text-tertiary); touch-action: none; }
+@media (orientation: landscape) {
+  #pad { grid-template-columns: 1fr 1fr; grid-template-rows: auto auto 1fr; }
+  .status, #motion { grid-column: 1 / -1; }
+  .a { grid-row: 3; width: min(40vh, 12rem); min-height: 0; align-self: center; }
+  .row { grid-column: 2; grid-row: 3; align-content: center; }
+  .touch { grid-column: 1 / -1; min-height: 4rem; }
+}

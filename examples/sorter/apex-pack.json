@@ -1,0 +1,26 @@
+{
+  "format": "apex-pack",
+  "manifestVersion": 2,
+  "id": "sorter",
+  "name": "Sorter",
+  "version": "1.0.0",
+  "description": "Paste messages, one per line: each gets a topic and an urgency, or says it is unsure.",
+  "author": { "name": "Apex examples" },
+  "contributes": {
+    "apps": [
+      {
+        "id": "main",
+        "name": "Sorter",
+        "root": "app",
+        "entry": "index.html",
+        "build": "kit",
+        "kit": 1,
+        "kind": "tool",
+        "sidebar": true
+      }
+    ]
+  },
+  "permissions": {
+    "model": true
+  }
+}

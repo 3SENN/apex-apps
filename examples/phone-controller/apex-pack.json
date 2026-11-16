@@ -1,0 +1,26 @@
+{
+  "format": "apex-pack",
+  "manifestVersion": 2,
+  "id": "phone-controller",
+  "name": "Phone controller",
+  "version": "1.0.0",
+  "description": "Phones on the same Wi-Fi scan a QR code and become controllers: tilt, A, B, Home and a pointer pad.",
+  "author": { "name": "Apex examples" },
+  "contributes": {
+    "apps": [
+      {
+        "id": "main",
+        "name": "Phone controller",
+        "root": "app",
+        "entry": "index.html",
+        "build": "kit",
+        "kit": 1,
+        "kind": "game",
+        "sidebar": true
+      }
+    ]
+  },
+  "permissions": {
+    "server": { "lan": true }
+  }
+}
