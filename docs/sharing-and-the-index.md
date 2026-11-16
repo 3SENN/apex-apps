@@ -213,9 +213,14 @@ Browse offers it again with one click. Items are added by pull request to
 author's key and checks every request: signatures and pins, hashes, Apex's
 file rules, and that the sources match the packs.
 
-Today it takes `.apexpack` files, hosted in the repository. Apps
-(`.apexapp`) and worlds (`.apexworld`) aren't listed there yet: share them as
-a file, a link or an index of your own.
+It takes packs, apps and worlds. Archives up to 20 MB live in the
+repository; a bigger app goes up as a release asset of your own and is listed
+by its address and hash (`pack.mjs --entry` prints the entry), and the
+index's CI downloads and checks it. Every entry sits on a shelf (`category`)
+and may have a `color` and a picture. A bundled app names its source code in
+the manifest's `homepage`, for reviewers. The
+[apex-packs README](https://github.com/3SENN/apex-packs#share-what-you-made)
+has the steps.
 
 What you may share there:
 

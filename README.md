@@ -65,9 +65,10 @@ own. More in [docs/getting-started.md](docs/getting-started.md).
 Sign every version with the same key: Apex pins a pack to the key that signed
 its first install. See [docs/sharing-and-the-index.md](docs/sharing-and-the-index.md).
 
-The [Apex community index](https://github.com/3SENN/apex-packs) takes
-`.apexpack` files by pull request today. Share apps and worlds as a file, a
-link or an index of your own.
+The [Apex community index](https://github.com/3SENN/apex-packs) takes packs,
+apps and worlds by pull request, each signed, reviewed in the open and put on
+a shelf in Browse. Apps too big for that repository are listed from a release
+asset of your own.
 
 ## Docs
 
