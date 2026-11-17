@@ -1,6 +1,6 @@
 # Connectors
 
-People connect services to Apex (Jira and Confluence, GitHub, Notion,
+People connect services to Atelier (Jira and Confluence, GitHub, Notion,
 Linear and others, or an MCP server of their own) under Connectors. An app
 can use those connectors, so it builds on what the person already connected
 instead of asking for its own access.
@@ -12,7 +12,7 @@ instead of asking for its own access.
 "permissions": { "connectors": ["atlassian", "github"] }
 ```
 
-- Name each connector by its id in Apex's connector directory (`notion`,
+- Name each connector by its id in Atelier's connector directory (`notion`,
   `atlassian`, `asana`, `linear`, `github`, `sentry`, `figma`, `stripe`,
   `supabase` and more), or by the name of an MCP server the person added
   themselves. `^[a-z0-9][a-z0-9-]{0,63}$`, at most 10, no duplicates.
@@ -25,25 +25,25 @@ instead of asking for its own access.
 ## Use them
 
 ```js
-const { atlassian } = await apex.connectors.status()
+const { atlassian } = await atelier.connectors.status()
 // { connected: true, name: 'Jira and Confluence' } or { connected: false, name }
 
 if (!atlassian.connected) {
-  // Opens Apex's Connectors at this service so the person can connect it.
-  await apex.connectors.connect('atlassian')
+  // Opens Atelier's Connectors at this service so the person can connect it.
+  await atelier.connectors.connect('atlassian')
 }
 
-const tools = await apex.connectors.tools('atlassian')
+const tools = await atelier.connectors.tools('atlassian')
 // [{ name, title, description, readOnly, inputSchema }]: only tools the person has on
 
-const { text, data, isError } = await apex.connectors.call('atlassian', toolName, input)
+const { text, data, isError } = await atelier.connectors.call('atlassian', toolName, input)
 ```
 
 - `status()` covers every connector the manifest names: whether it is
   connected here, and its name. Never its address or credentials.
 - `tools(ref)` lists what the person has turned on. Tools they turned off
   aren't there.
-- `call(ref, tool, input)` runs one tool inside Apex, through the connector's
+- `call(ref, tool, input)` runs one tool inside Atelier, through the connector's
   own session, and returns `{ text, data, isError }`: the text result, the
   structured result (or `null`), and whether the tool reported an error.
   `input` is checked against the tool's `inputSchema`.
@@ -74,6 +74,6 @@ The audit log records each connector call (connector and tool), and the
 `PackPermissionCeiling` policy can limit which connectors packs may use. See
 [organisations.md](organisations.md).
 
-Apex's playtest uses no connectors: `status()` reports them as not connected.
+Atelier's playtest uses no connectors: `status()` reports them as not connected.
 
 See the [company-dashboard](../examples/company-dashboard) example.

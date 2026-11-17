@@ -1,9 +1,9 @@
-// Hello kit: the person's companion on a little stage, drawn with the Apex
+// Hello kit: the person's companion on a little stage, drawn with the Atelier
 // kit. "Say hi" (or a click on the companion) cheers it up. No build step:
-// "three" and "apex-kit/..." come from the import map Apex adds because the
+// "three" and "atelier-kit/..." come from the import map Atelier adds because the
 // manifest says "kit": 1.
 import * as THREE from 'three'
-import { character } from 'apex-kit/character.js'
+import { character } from 'atelier-kit/character.js'
 
 const stage = document.getElementById('stage')
 const hello = document.getElementById('hello')
@@ -12,7 +12,7 @@ const pickButton = document.getElementById('pick')
 
 // The "art" slot: the asset pack the person picked for it, else this app's own app/art/ files.
 // Read once at start; picking another asset pack reloads the app.
-const art = (path) => apex.assets.url('art', path)
+const art = (path) => atelier.assets.url('art', path)
 document.body.style.backgroundImage = `url("${art('backdrop.svg')}")`
 const palette = await fetch(art('palette.json'))
   .then((res) => res.json())
@@ -39,7 +39,7 @@ let name = null
 let hellos = 0
 
 // Opened from a world's place? Then the cast is whoever is there: the visitor first.
-const here = await apex.world.context()
+const here = await atelier.world.context()
 
 async function show(members) {
   if (body) scene.remove(body)
@@ -57,14 +57,14 @@ async function show(members) {
   hello.textContent = name ? `Hello, ${name}!${where}${company}` : 'Nobody is playing yet. Pick a companion.'
 }
 
-await show(here?.cast.length ? here.cast : await apex.cast.members())
+await show(here?.cast.length ? here.cast : await atelier.cast.members())
 
 function sayHi() {
   hellos++
   pip?.setMood('happy')
   setTimeout(() => pip?.setMood('idle'), 1200)
   // The app's sidebar row shows this while the app is open.
-  void apex.status.set({ text: `${hellos} hello${hellos === 1 ? '' : 's'}`, badge: hellos })
+  void atelier.status.set({ text: `${hellos} hello${hellos === 1 ? '' : 's'}`, badge: hellos })
 }
 
 hiButton.addEventListener('click', sayHi)
@@ -79,8 +79,8 @@ renderer.domElement.addEventListener('pointerdown', (event) => {
 
 pickButton.addEventListener('click', async () => {
   try {
-    // Apex asks the person who plays; cancelling keeps the cast as it was.
-    await show(await apex.cast.pick({ max: 1 }))
+    // Atelier asks the person who plays; cancelling keeps the cast as it was.
+    await show(await atelier.cast.pick({ max: 1 }))
   } catch (err) {
     hello.textContent = err.message
   }
@@ -105,8 +105,8 @@ function frame(now) {
   }
   pip?.update(dt)
   renderer.render(scene, camera)
-  // What Apex's playtest reads. Cheap: Apex sends it only when it changes.
-  apex.test?.ready({ companion: name, hellos })
+  // What Atelier's playtest reads. Cheap: Atelier sends it only when it changes.
+  atelier.test?.ready({ companion: name, hellos })
   requestAnimationFrame(frame)
 }
 requestAnimationFrame(frame)

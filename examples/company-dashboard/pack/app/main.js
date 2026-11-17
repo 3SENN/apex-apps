@@ -1,6 +1,6 @@
-// Contoso dashboard: a company tool on Apex.
+// Contoso dashboard: a company tool on Atelier.
 //
-// - auth: the person signs in with their Contoso account through Apex. Apex
+// - auth: the person signs in with their Contoso account through Atelier. Atelier
 //   sends the access token to api.contoso.example and refreshes it; this code
 //   never sees a token and never sets Authorization.
 // - permissions.connectors: the person's own Jira connector. Each tool runs
@@ -8,8 +8,8 @@
 //   so every call here starts from a click.
 // - env: API_URL and TEAM. An organisation can set them per company with the
 //   AppConfig policy (see ../policy).
-const API = apex.env.API_URL
-const TEAM = apex.env.TEAM
+const API = atelier.env.API_URL
+const TEAM = atelier.env.TEAM
 
 const $ = (id) => document.getElementById(id)
 const who = $('who')
@@ -30,12 +30,12 @@ let signedIn = false
 let taskCount = 0
 let searchTool = null
 
-const report = () => apex.test?.ready({ signedIn, tasks: taskCount, jira: Boolean(searchTool) })
+const report = () => atelier.test?.ready({ signedIn, tasks: taskCount, jira: Boolean(searchTool) })
 
 // ---- signing in ----
 
 async function refreshSignIn() {
-  const { corp } = await apex.auth.status()
+  const { corp } = await atelier.auth.status()
   signedIn = corp.signedIn
   who.textContent = corp.signedIn ? `Signed in${corp.user ? ` as ${corp.user}` : ''}.` : 'Sign in to see your tasks.'
   signInButton.hidden = corp.signedIn
@@ -53,7 +53,7 @@ signInButton.addEventListener('click', async () => {
   signInButton.disabled = true
   try {
     // Opens the identity provider in a tab; resolves once the person is signed in.
-    await apex.auth.signIn('corp')
+    await atelier.auth.signIn('corp')
   } catch (err) {
     // Cancelled or failed: say so, and keep the button.
     who.textContent = err.message
@@ -64,7 +64,7 @@ signInButton.addEventListener('click', async () => {
 })
 
 signOutButton.addEventListener('click', async () => {
-  await apex.auth.signOut('corp')
+  await atelier.auth.signOut('corp')
   await refreshSignIn()
 })
 
@@ -100,7 +100,7 @@ async function loadTasks() {
     }),
   )
   tasksStatus.textContent = tasks.length ? '' : 'No open tasks.'
-  void apex.status.set({ badge: tasks.length || null })
+  void atelier.status.set({ badge: tasks.length || null })
   report()
 }
 
@@ -109,16 +109,16 @@ tasksRetry.addEventListener('click', () => void loadTasks())
 // ---- the person's Jira connector ----
 
 async function refreshJira() {
-  const { atlassian } = await apex.connectors.status()
+  const { atlassian } = await atelier.connectors.status()
   searchForm.hidden = true
   searchTool = null
   connectButton.hidden = atlassian.connected
   if (!atlassian.connected) {
-    jiraStatus.textContent = 'Connect Jira and Confluence in Apex to search it here.'
+    jiraStatus.textContent = 'Connect Jira and Confluence in Atelier to search it here.'
     return report()
   }
   // Only the tools the person has on are listed. This box uses a read-only search tool.
-  const tools = await apex.connectors.tools('atlassian')
+  const tools = await atelier.connectors.tools('atlassian')
   searchTool = tools.find((tool) => tool.readOnly && /search/i.test(tool.name)) ?? null
   const name = atlassian.name ?? 'Jira'
   if (!searchTool) jiraStatus.textContent = `${name} is connected, but no search tool is on. Turn one on in Connectors.`
@@ -129,7 +129,7 @@ async function refreshJira() {
   report()
 }
 
-connectButton.addEventListener('click', () => void apex.connectors.connect('atlassian'))
+connectButton.addEventListener('click', () => void atelier.connectors.connect('atlassian'))
 // Back from Connectors: look again.
 document.addEventListener('visibilitychange', () => {
   if (!document.hidden) void refreshJira()
@@ -147,7 +147,7 @@ searchForm.addEventListener('submit', async (event) => {
   }
   results.textContent = 'Searching…'
   try {
-    const { text, isError } = await apex.connectors.call('atlassian', searchTool.name, { [field]: query })
+    const { text, isError } = await atelier.connectors.call('atlassian', searchTool.name, { [field]: query })
     results.textContent = isError ? `The search didn't work: ${text}` : text || 'Nothing found.'
   } catch (err) {
     // Refused: the tool is off, the person said no, or the policy doesn't allow it.

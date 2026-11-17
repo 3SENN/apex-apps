@@ -1,11 +1,11 @@
 {
-  "format": "apex-pack",
+  "format": "atelier-pack",
   "manifestVersion": 2,
   "id": "sorter",
   "name": "Sorter",
   "version": "1.0.0",
   "description": "Paste messages, one per line: each gets a topic and an urgency, or says it is unsure.",
-  "author": { "name": "Apex examples" },
+  "author": { "name": "Atelier examples" },
   "contributes": {
     "apps": [
       {

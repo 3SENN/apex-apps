@@ -5,14 +5,14 @@ to seven key points), and save them as Markdown.
 
 What it shows:
 
-- `permissions.model`: `apex.ai.json` with a JSON Schema, on the person's own
+- `permissions.model`: `atelier.ai.json` with a JSON Schema, on the person's own
   engine (their API key or Claude Code). The app ships no key.
-- `permissions.files`: `apex.files.open` for a file the person picks and
-  `apex.files.save` to a place they choose.
+- `permissions.files`: `atelier.files.open` for a file the person picks and
+  `atelier.files.save` to a place they choose.
 - Model output rendered as text (`textContent`), never as HTML.
 - Every refusal (the model budget, no engine set up) shown as a sentence
   next to the button, so the person is never stuck.
-- `apex.storage` keeps the last notes; `apex.test?.ready` reports how many
+- `atelier.storage` keeps the last notes; `atelier.test?.ready` reports how many
   points there are.
 - The app uses the defaults: `root` is `app` and `entry` is `index.html`. It
   has no `kit`, because it imports nothing from the kit.

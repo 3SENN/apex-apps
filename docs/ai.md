@@ -1,24 +1,24 @@
-# Apex as the AI engine
+# Atelier as the AI engine
 
-With `permissions.model`, your app calls the model through `apex.ai`. Calls
-run on the engine the person chose in Apex: their own API key, or their
+With `permissions.model`, your app calls the model through `atelier.ai`. Calls
+run on the engine the person chose in Atelier: their own API key, or their
 Claude Code sign-in. Your app ships no key and runs no server for it, and the
 person always knows whose account pays: the review says the pack "can ask
 your Claude model one-off questions, which counts toward your usage".
 
 ## Tiers, not models
 
-Ask for a tier: `"fast"` (the default) or `"smart"`. Apex maps tiers to models,
+Ask for a tier: `"fast"` (the default) or `"smart"`. Atelier maps tiers to models,
 so your app keeps working when models change. A model name isn't accepted.
 
 ## Calls
 
 ```js
 // Text
-const text = await apex.ai.ask('Suggest a name for a cosy café.', { tier: 'fast', maxTokens: 200 })
+const text = await atelier.ai.ask('Suggest a name for a cosy café.', { tier: 'fast', maxTokens: 200 })
 
 // A value that fits a JSON Schema
-const plan = await apex.ai.json('Plan a three-step warm-up for table tennis.', {
+const plan = await atelier.ai.json('Plan a three-step warm-up for table tennis.', {
   schema: {
     type: 'object',
     properties: { steps: { type: 'array', items: { type: 'string' }, maxItems: 3 } },
@@ -27,12 +27,12 @@ const plan = await apex.ai.json('Plan a three-step warm-up for table tennis.', {
 })
 
 // The reply as it arrives
-const all = await apex.ai.stream('Tell a two-line story about a lighthouse.', {
+const all = await atelier.ai.stream('Tell a two-line story about a lighthouse.', {
   onText: (piece) => (out.textContent += piece),
 })
 
 // A conversation with your own tools
-const session = apex.ai.session({
+const session = atelier.ai.session({
   system: 'You narrate a short, kind adventure. Use roll_dice when luck decides.',
   tier: 'smart',
   tools: [{
@@ -49,7 +49,7 @@ session.close()
 
 - `ask(prompt, { system, tier, maxTokens })` resolves to text.
 - `json(prompt, { schema, system, tier, maxTokens })` resolves to a value
-  checked against the schema; Apex asks once more when the first answer
+  checked against the schema; Atelier asks once more when the first answer
   doesn't fit.
 - `stream(prompt, { onText, system, tier, maxTokens })` calls `onText` with
   each piece and resolves to the whole reply. With an API key the pieces
@@ -72,7 +72,7 @@ writes no text. Use it to sort, route or score things, where a written reply
 would be wasted.
 
 ```js
-const { answers, source } = await apex.ai.decide(message, {
+const { answers, source } = await atelier.ai.decide(message, {
   topic: {
     type: 'choice',
     instructions: 'What is this message about?',
@@ -105,12 +105,12 @@ const topic = answers.topic.probabilities[answers.topic.choice] >= sure ? answer
 
 The [sorter](../examples/sorter) example sorts messages this way.
 
-`apex.ask(prompt, { system })` is the older one-shot call (prompt up to 20,000
-characters). It counts the same way; prefer `apex.ai` in new code.
+`atelier.ask(prompt, { system })` is the older one-shot call (prompt up to 20,000
+characters). It counts the same way; prefer `atelier.ai` in new code.
 
 ## The budget
 
-Every model call of a pack counts: `apex.ai.*`, `apex.ask`, `apex.cast.speak`
+Every model call of a pack counts: `atelier.ai.*`, `atelier.ask`, `atelier.cast.speak`
 and each round of a session. A pack may make **60 calls an hour and 500 a
 day**. Past that, the call rejects with a sentence such as "A pack can use the
 model 60 times an hour."
@@ -118,7 +118,7 @@ model 60 times an hour."
 - Catch every call and show the message where the person is looking.
 - Don't call the model on a timer or in a loop the person didn't start.
 - Batch: one `json()` call that returns ten items beats ten calls.
-- Cache answers you can reuse (`apex.storage`, IndexedDB).
+- Cache answers you can reuse (`atelier.storage`, IndexedDB).
 
 ## When there is no model
 
@@ -126,7 +126,7 @@ A call can also fail because the person hasn't set up an engine, or the
 model is unreachable. Treat it like the budget: a message and a way to try
 again, never a blank screen.
 
-In Apex's playtest (`test_pack`, which companions use when they build or
+In Atelier's playtest (`test_pack`, which companions use when they build or
 remix your app), model calls return stand-ins unless an installed version of
 the pack may already use the model: `ai.json` and `ai.decide` return `null`,
 the others a short text. Check what you get before you use it.

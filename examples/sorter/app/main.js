@@ -1,4 +1,4 @@
-// A sorter on Apex's quick decisions (apex.ai.decide): one line per message,
+// A sorter on Atelier's quick decisions (atelier.ai.decide): one line per message,
 // each gets a topic and an urgency with how sure the model is. No text is
 // written, so it runs in about a tenth of a second on the person's decision
 // model, or on their Claude engine when they have none. Unsure answers are
@@ -23,11 +23,11 @@ go.addEventListener('click', async () => {
     row.textContent = line + ' …'
     out.append(row)
     try {
-      const result = await apex.ai.decide(line, {
+      const result = await atelier.ai.decide(line, {
         topic: { type: 'choice', instructions: 'What is this message about?', criteria: TOPICS },
         urgency: { type: 'score', instructions: 'How soon does it need an answer?', criteria: URGENCY },
       })
-      // In Apex's playtest, a pack not yet allowed the model gets null.
+      // In Atelier's playtest, a pack not yet allowed the model gets null.
       if (!result) {
         row.textContent = line + ' → no answer'
         continue
@@ -45,6 +45,6 @@ go.addEventListener('click', async () => {
     }
   }
   go.disabled = false
-  apex.test?.ready({ sorted })
+  atelier.test?.ready({ sorted })
 })
-apex.test?.ready({ sorted: 0 })
+atelier.test?.ready({ sorted: 0 })

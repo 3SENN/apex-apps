@@ -31,7 +31,7 @@ Answer it in one of two ways (an open page wins over the module):
 - **From an open page** of your pack:
 
   ```js
-  apex.services.provide('story-library', {
+  atelier.services.provide('story-library', {
     list: async () => loadStories(),
     append: async ({ storyId, text }, ctx) => addText(storyId, text, ctx.from),
   })
@@ -43,11 +43,11 @@ Answer it in one of two ways (an open page wins over the module):
   ```js
   // services/library.js
   export async function list(input, ctx) {
-    return (await apex.storage.get('stories')) ?? []
+    return (await atelier.storage.get('stories')) ?? []
   }
   ```
 
-  The module shares the pack's origin, so it reads the same `apex.storage`,
+  The module shares the pack's origin, so it reads the same `atelier.storage`,
   IndexedDB and `localStorage` as the app. Keep it outside every app's folder.
 
 `ctx.from` is the calling pack's id, or `"companion"` when the person's
@@ -55,11 +55,11 @@ companion called it.
 
 Rules:
 
-- `service`: `^[a-z][a-z0-9-]{1,47}$`. Apex keeps some names for itself:
-  `ai`, `apex`, `assets`, `auth`, `cast`, `connectors`, `events`, `files`,
+- `service`: `^[a-z][a-z0-9-]{1,47}$`. Atelier keeps some names for itself:
+  `ai`, `atelier`, `assets`, `auth`, `cast`, `connectors`, `events`, `files`,
   `guide`, `kit`, `notify`, `pad`, `rooms`, `status`, `storage`, `world`.
 - 1 to 30 methods, named `^[a-z][A-Za-z0-9_]{0,31}$`. Each `input` is a JSON
-  Schema object (`type` `"object"` if given). Apex checks every call's input
+  Schema object (`type` `"object"` if given). Atelier checks every call's input
   against it.
 - Answers must be JSON, up to 1 MB. A call times out after 30 s.
 - At most 10 services a pack.
@@ -75,28 +75,28 @@ Rules:
 ```
 
 ```js
-const stories = await apex.services.call('story-library', 'list', {})
+const stories = await atelier.services.call('story-library', 'list', {})
 ```
 
 - The pack waits until a pack that is on provides it; its page says what it
   waits for.
 - The review says "Uses a service from other packs: story-library".
-- At most 20. Apex's own services can't be listed in `uses` yet; use
-  `window.apex` directly.
+- At most 20. Atelier's own services can't be listed in `uses` yet; use
+  `window.atelier` directly.
 
 ## Events
 
 ```json
 "events": {
   "emits": ["chapter-done"],
-  "on": ["other-pack/achievement", "apex.theme"]
+  "on": ["other-pack/achievement", "atelier.theme"]
 }
 ```
 
 ```js
-apex.events.emit('chapter-done', { chapter: 3 })
+atelier.events.emit('chapter-done', { chapter: 3 })
 
-const stop = apex.events.on('other-pack/achievement', (data, name) => {
+const stop = atelier.events.on('other-pack/achievement', (data, name) => {
   showBadge(data)
 })
 stop() // stops listening
@@ -104,7 +104,7 @@ stop() // stops listening
 
 - `emits`: your own names, `^[a-z][a-z0-9-]{0,31}$`, up to 20. Others hear
   them as `<your pack id>/<name>`.
-- `on`: `<pack id>/<event>` of other packs, or `apex.theme` (Apex's own theme
+- `on`: `<pack id>/<event>` of other packs, or `atelier.theme` (Atelier's own theme
   change), up to 30. A pack doesn't listen to its own events.
 - Packs only observe events: a listener can't change or stop one.
 - Up to 64 KB of data per event, 50 events a second.

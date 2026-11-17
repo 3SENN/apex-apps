@@ -1,13 +1,13 @@
 # The kit and the cast
 
-The **kit** is what makes an app look like Apex: three.js, the companion
+The **kit** is what makes an app look like Atelier: three.js, the companion
 runtime, props and a world renderer, versioned together. The **cast** is the
 person's companions as characters in your app. Both are offers: an app with
 its own art and characters doesn't need either.
 
 ## The kit
 
-Add `"kit": 1` to a `"build": "kit"` app. Apex then adds an import map to the
+Add `"kit": 1` to a `"build": "kit"` app. Atelier then adds an import map to the
 app's pages, so these bare names work:
 
 | Import | What it is |
@@ -18,17 +18,17 @@ app's pages, so these bare names work:
 | `three/addons/utils/BufferGeometryUtils.js` | |
 | `three/addons/utils/SkeletonUtils.js` | |
 | `three/addons/controls/OrbitControls.js` | |
-| `apex-kit/character.js` | A companion in your own scene |
-| `apex-kit/guide.js` | The person's companion in a corner of the page, with a speech bubble |
-| `apex-kit/props.js` | Twenty props in the companions' style, coloured from a palette |
-| `apex-kit/world.js` | A world file as a three.js scene |
+| `atelier-kit/character.js` | A companion in your own scene |
+| `atelier-kit/guide.js` | The person's companion in a corner of the page, with a speech bubble |
+| `atelier-kit/props.js` | Twenty props in the companions' style, coloured from a palette |
+| `atelier-kit/world.js` | A world file as a three.js scene |
 
-The kit's files are served inside your app's own origin at `/__apex/kit/1/`,
+The kit's files are served inside your app's own origin at `/__atelier/kit/1/`,
 so modules, workers and cross-origin isolated apps load them like your own
 files. Your pack stays small: the libraries and art aren't in it.
 
 A kit major never changes under you: an app that says `"kit": 1` gets kit 1's
-versions whatever Apex version runs it. Not in kit 1 yet: Phaser, Preact,
+versions whatever Atelier version runs it. Not in kit 1 yet: Phaser, Preact,
 Rapier, and walk, run and jump clips. For 2D, use plain canvas or the DOM, or
 bundle a library yourself in a `"bundled"` app.
 
@@ -36,9 +36,9 @@ bundle a library yourself in a `"bundled"` app.
 
 ```js
 import * as THREE from 'three'
-import { character } from 'apex-kit/character.js'
+import { character } from 'atelier-kit/character.js'
 
-const [member] = await apex.cast.members()
+const [member] = await atelier.cast.members()
 const pip = await character(member.look, { mood: 'idle' })
 scene.add(pip.object3d)
 
@@ -69,7 +69,7 @@ pip.dispose()
 ### The guide
 
 ```js
-import { guide } from 'apex-kit/guide.js'
+import { guide } from 'atelier-kit/guide.js'
 
 const g = await guide({ corner: 'bottom-right', size: 160 })
 g.say('Drag the pieces onto the board.', { mood: 'happy' })
@@ -86,7 +86,7 @@ bubble for `ms`, or until the next `say`. `corner` is `bottom-right` or
 ### Props
 
 ```js
-import { prop, PROPS, PALETTES } from 'apex-kit/props.js'
+import { prop, PROPS, PALETTES } from 'atelier-kit/props.js'
 
 const bench = prop('bench', { palette: 'meadow', tint: { accent: '#ff8a5c' } })
 scene.add(bench) // a Group standing on y = 0
@@ -101,7 +101,7 @@ and footprint in tiles; `PALETTES` holds the colours of `meadow`, `seaside`,
 ### A world in your scene
 
 ```js
-import { createWorldView } from 'apex-kit/world.js'
+import { createWorldView } from 'atelier-kit/world.js'
 
 const view = createWorldView(worldFile)
 scene.add(view.root, view.lights)
@@ -115,7 +115,7 @@ scene.background = view.sky
 ### Bundled apps and the kit
 
 A bundled app can't import the kit's JavaScript modules: they need the kit's
-own three.js. It can still load kit files by address (`/__apex/kit/1/…`) and
+own three.js. It can still load kit files by address (`/__atelier/kit/1/…`) and
 draw the cast's looks its own way.
 
 ## The cast
@@ -130,11 +130,11 @@ The review then says the app "uses your companions as characters (their
 names and looks, never what they know)".
 
 ```js
-const members = await apex.cast.members()
+const members = await atelier.cast.members()
 // [{ ref, name, rig, look }]: who the person picked for this app, else their active companion
 
-const picked = await apex.cast.pick({ max: 2 })
-// Apex asks the person who plays; a cancel keeps the cast as it was
+const picked = await atelier.cast.pick({ max: 2 })
+// Atelier asks the person who plays; a cancel keeps the cast as it was
 ```
 
 - `look` is the companion's rig, parts, face and colours: part ids and colours
@@ -151,22 +151,22 @@ const picked = await apex.cast.pick({ max: 2 })
 With `permissions.model` and `permissions.speak`:
 
 ```js
-const line = await apex.cast.speak(member.ref, { situation: 'lost a long rally 9-11', mood: 'disappointed' })
+const line = await atelier.cast.speak(member.ref, { situation: 'lost a long rally 9-11', mood: 'disappointed' })
 ```
 
-Apex writes one short line (about 25 words at most) from the companion's
+Atelier writes one short line (about 25 words at most) from the companion's
 personality. Your app sends only the situation and gets back the text.
 Each line counts toward the pack's model budget. Show it as text.
 
 ### When the cast is empty
 
-`members()` can be `[]`: in Apex's playtest, or before the person has a
+`members()` can be `[]`: in Atelier's playtest, or before the person has a
 companion. Draw a stand-in (a simple shape, a default name) instead of
 failing. See [hello-kit](../examples/hello-kit).
 
 ### Opened from a world
 
-When a world's place opens your app, `apex.world.context()` returns the cast
+When a world's place opens your app, `atelier.world.context()` returns the cast
 there: the visitor's companion first, then the residents of that place.
 Guests from the world have refs of their own in your app and speak through
-`apex.cast.speak(ref)` like companions. See [worlds.md](worlds.md).
+`atelier.cast.speak(ref)` like companions. See [worlds.md](worlds.md).

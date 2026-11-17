@@ -1,5 +1,5 @@
 // The phone: joins the app with a name, turns on motion, and sends what the
-// phone does over its socket (apexServer comes from __apex/client.js, which
+// phone does over its socket (atelierServer comes from __atelier/client.js, which
 // reconnects by itself). The app can buzz it: Android vibrates; an iPhone has
 // no vibration for pages, but Safari gives a light tap when a switch flips.
 (function () {
@@ -34,7 +34,7 @@
   }
   var name = $('name')
   try {
-    name.value = localStorage.getItem('apex-controller-name') || ''
+    name.value = localStorage.getItem('atelier-controller-name') || ''
   } catch (e) {}
 
   // The screen stays on while you play.
@@ -52,9 +52,9 @@
   $('go').addEventListener('click', function () {
     var who = name.value.trim() || 'Phone'
     try {
-      localStorage.setItem('apex-controller-name', who)
+      localStorage.setItem('atelier-controller-name', who)
     } catch (e) {}
-    link = apexServer.connect({ query: { name: who } })
+    link = atelierServer.connect({ query: { name: who } })
     link.onOpen(function () {
       $('status').textContent = words.on
     })

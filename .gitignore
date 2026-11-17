@@ -3,8 +3,8 @@ dist/
 *.pem
 .env
 .env.local
-*.apexapp
-*.apexpack
-*.apexworld
+*.atelierapp
+*.atelierpack
+*.atelierworld
 .DS_Store
 Thumbs.db

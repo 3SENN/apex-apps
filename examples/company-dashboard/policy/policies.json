@@ -1,6 +1,6 @@
 {
   "PackForceInstall": [
-    { "url": "https://apps.contoso.example/contoso-dashboard-1.0.0.apexapp" }
+    { "url": "https://apps.contoso.example/contoso-dashboard-1.0.0.atelierapp" }
   ],
   "AppConfig": {
     "contoso-dashboard": {

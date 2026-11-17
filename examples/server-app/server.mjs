@@ -4,18 +4,18 @@
 //
 //   node server.mjs        listens on http://127.0.0.1:8787 (PORT changes it)
 //
-// It answers CORS for the app's origin, apex-pack://server-notes, including
+// It answers CORS for the app's origin, atelier-pack://server-notes, including
 // the preflight that a JSON POST needs. Notes live in memory only.
 //
 // Your real server is where your own keys live (a database password, the key
 // of a model API it calls): in its own environment, never in the pack. It
-// also checks the person's token (Authorization: Bearer ...), which Apex adds
-// to requests to the secret's hosts. Apex never sends that token to
+// also checks the person's token (Authorization: Bearer ...), which Atelier adds
+// to requests to the secret's hosts. Atelier never sends that token to
 // 127.0.0.1, so this development server takes requests without one.
 import { createServer } from 'node:http'
 
 const PORT = Number(process.env.PORT) || 8787
-const APP_ORIGIN = 'apex-pack://server-notes'
+const APP_ORIGIN = 'atelier-pack://server-notes'
 const MAX_BODY = 16 * 1024
 
 const notes = [{ id: 1, text: 'This note comes from server.mjs.' }]
