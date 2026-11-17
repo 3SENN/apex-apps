@@ -5,14 +5,14 @@ places, residents and a sky. The person walks it as their companion; stepping
 into a place opens that place's app, with the residents there as its cast.
 
 A world is data. It runs no code, so a pack that holds only worlds asks for no
-permissions. It travels as `.apexworld`.
+permissions. It travels as `.atelierworld`.
 
 ```json
 "manifestVersion": 2,
 "contributes": { "worlds": ["worlds/riverside.json"] }
 ```
 
-Apex's own Worlds app shows worlds and edits the person's own. It comes
+Atelier's own Worlds app shows worlds and edits the person's own. It comes
 turned off; opening a world (the pack page's **Open**) turns it on. See the
 [world example](../examples/world).
 
@@ -20,7 +20,7 @@ turned off; opening a world (the pack page's **Open**) turns it on. See the
 
 ```json
 {
-  "format": "apex-world",
+  "format": "atelier-world",
   "version": 1,
   "id": "riverside",
   "name": "Riverside",
@@ -57,7 +57,7 @@ turned off; opening a world (the pack page's **Open**) turns it on. See the
 
 | Field | Type | Rules |
 |---|---|---|
-| `format` | `"apex-world"` | required |
+| `format` | `"atelier-world"` | required |
 | `version` | `1` | required |
 | `id` | string | `^[a-z0-9][a-z0-9-]{0,47}$`. Unique among the pack's worlds. |
 | `name` | text | Up to 80. |
@@ -116,7 +116,7 @@ isn't walkable.
 - `name` up to 60 characters.
 - `opens: { "pack": "<pack id>", "app": "<app id>" }` makes stepping in open
   that app. It may be any pack's app: a world never waits for one. If the
-  visitor has it but it's off, Apex turns it on; if they don't have it, Apex
+  visitor has it but it's off, Atelier turns it on; if they don't have it, Atelier
   opens Browse at that pack. A place that opens an app of the world's own
   pack must name one of its apps.
 
@@ -141,12 +141,12 @@ Each resident is either a **guest** or an **open spot**, never both:
   `ears`, `hair`, `hat`, `eyeAccessory`, `earAccessory`, `prop`; all but
   `head` may be `null`), `face` (`eyes`, `brows`, `mouth`) and `colors`
   (`skin`, `hair`, `accent`, `outfit` as `#rrggbb`), from the catalogue below.
-  The easiest way to get a look you like is to make the world in Apex's
+  The easiest way to get a look you like is to make the world in Atelier's
   Worlds app and copy it from there.
 - An **open spot** (`"companion": "local"`) is filled with one of the
   visitor's own companions: they walk as their active companion, and their
   other companions fill the open spots in order.
-- Residents talk when the visitor walks up to them: Apex writes one short
+- Residents talk when the visitor walks up to them: Atelier writes one short
   line in character, within the Worlds app's model budget. Nothing runs while
   the world isn't open.
 
@@ -171,7 +171,7 @@ app before you publish.
 ## In the app a place opens
 
 ```js
-const here = await apex.world.context()
+const here = await atelier.world.context()
 // null when no world opened this app, else:
 // {
 //   world: { ref, name, palette, sky },
@@ -181,18 +181,18 @@ const here = await apex.world.context()
 ```
 
 Guests get a ref of their own in your app and speak through
-`apex.cast.speak(ref, { situation })` like companions (with
+`atelier.cast.speak(ref, { situation })` like companions (with
 `permissions.model` and `permissions.speak`). Draw them with
 `character(member.look)`.
 
 ## Working with worlds from code
 
 A pack with `permissions.worlds` can list, read, save and open the person's
-worlds through `apex.worlds` (see [api.md](api.md#worlds)). The review says it
+worlds through `atelier.worlds` (see [api.md](api.md#worlds)). The review says it
 "shows, changes and opens your worlds, and lets the people in them talk". Most
 packs don't need it: shipping a world file is enough.
 
-## Rules Apex checks
+## Rules Atelier checks
 
 - The schema above; unknown keys are refused.
 - Every painted area, place area, prop, resident and `spawn` inside the world.

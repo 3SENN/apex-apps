@@ -8,17 +8,17 @@ anything is installed.
 
 | Extension | For |
 |---|---|
-| `.apexapp` | a pack with an app |
-| `.apexworld` | a pack that holds only worlds |
-| `.apexpack` | anything else (asset packs, panels, tools, skills…) |
+| `.atelierapp` | a pack with an app |
+| `.atelierworld` | a pack that holds only worlds |
+| `.atelierpack` | anything else (asset packs, panels, tools, skills…) |
 
 The bytes are the same in each; the extension picks the file icon and the
 review sheet. Inside:
 
 - every file of the pack, at its path;
-- `__apex/signature.json`: the signature (absent when unsigned);
-- optionally `__apex/share.json` (a note, up to 500 characters) and
-  `__apex/share.png` (a picture), which Share… adds. Neither is signed, so the
+- `__atelier/signature.json`: the signature (absent when unsigned);
+- optionally `__atelier/share.json` (a note, up to 500 characters) and
+  `__atelier/share.png` (a picture), which Share… adds. Neither is signed, so the
   review attributes them only to "whoever shared it".
 
 **The pack hash** is SHA-256 over one line per file, sorted by path: the path,
@@ -29,7 +29,7 @@ same hash however they were zipped.
 
 ```json
 {
-  "format": "apex-pack-signature",
+  "format": "atelier-pack-signature",
   "version": 1,
   "hash": "<64 hex>",
   "keyId": "<first 16 hex of the SHA-256 of the public key>",
@@ -41,8 +41,8 @@ same hash however they were zipped.
 ## Signing keys
 
 ```sh
-node tools/pack.mjs --new-key ~/keys/apex-author.pem
-node tools/pack.mjs examples/hello-kit hello-kit-1.0.0.apexapp --key ~/keys/apex-author.pem
+node tools/pack.mjs --new-key ~/keys/atelier-author.pem
+node tools/pack.mjs examples/hello-kit hello-kit-1.0.0.atelierapp --key ~/keys/atelier-author.pem
 ```
 
 See [tools/README.md](../tools/README.md) for every option.
@@ -50,7 +50,7 @@ See [tools/README.md](../tools/README.md) for every option.
 **Trust on first use.** The first install of a pack id pins it to the full
 fingerprint of the key that signed it. After that:
 
-- every update and reinstall must be signed with the same key, or Apex
+- every update and reinstall must be signed with the same key, or Atelier
   refuses it ("signed by a different author");
 - an unsigned pack can later move to a signed one (and is pinned to that key),
   never the other way;
@@ -60,35 +60,35 @@ So:
 
 - **One key per author, kept for good.** Back it up. Lose it and people must
   remove your pack to install a new one under the same id.
-- **Never commit it.** Whoever holds it can publish updates people's Apex
+- **Never commit it.** Whoever holds it can publish updates people's Atelier
   accepts.
-- **Apex has its own author key.** Packs you build or export inside Apex are
-  signed with a key Apex keeps in the system keychain, made the first time you
+- **Atelier has its own author key.** Packs you build or export inside Atelier are
+  signed with a key Atelier keeps in the system keychain, made the first time you
   export. It is a different key from your `.pem`, and there is no way to move
   one into the other. Pick one way to sign each pack id and stay with it.
 - A folder you load with **Load a folder…** installs unsigned, and exporting
-  it from Apex gives an unsigned file. Sign what you publish with `pack.mjs`.
+  it from Atelier gives an unsigned file. Sign what you publish with `pack.mjs`.
 
 **Someone else's pack** keeps its author's signature when exported. Remix
 makes a copy under a new id (`<id>-remix`), with `forkedFrom` filled in and no
 author or update address.
 
-## From inside Apex
+## From inside Atelier
 
 On an installed pack's page:
 
-- **Export…** saves `<id>-<version>.apexapp` (or `.apexworld`, `.apexpack`).
+- **Export…** saves `<id>-<version>.atelierapp` (or `.atelierworld`, `.atelierpack`).
 - **Share…** (packs with an app) adds a note and a picture made from the
   app's still, saves the archive and puts the picture (`.png`) beside it.
 
-Before a file leaves the computer, Apex refuses it if a file is a `.env` file
+Before a file leaves the computer, Atelier refuses it if a file is a `.env` file
 or holds text in a known key format.
 
 ## Opening a pack
 
-- **File**: double-click it, drop it on Apex, or Packs › **Install from
+- **File**: double-click it, drop it on Atelier, or Packs › **Install from
   file…**.
-- **Link**: `apex://packs?install=<https address>`, or Packs › **Install from
+- **Link**: `atelier://packs?install=<https address>`, or Packs › **Install from
   link…**. Downloads are https only (http only on this computer), follow at
   most five redirects, and stop at about 301 MB.
 - **Index**: Packs › **Browse**.
@@ -100,12 +100,12 @@ assistant, and every problem.
 ## Updates
 
 ```json
-"updateUrl": "https://downloads.example.com/hello-kit/latest/hello-kit.apexapp"
+"updateUrl": "https://downloads.example.com/hello-kit/latest/hello-kit.atelierapp"
 ```
 
 - Point `updateUrl` at an address that always serves the newest archive, with
   a file name that doesn't change.
-- Apex checks it when the person presses **Check for updates**, and about once
+- Atelier checks it when the person presses **Check for updates**, and about once
   a day while it runs.
 - A newer version (by `version`) signed by the same key applies on its own if
   it asks for nothing new. One that adds a permission line above *info* (a
@@ -121,7 +121,7 @@ An index is one https JSON file, at most 2 MB:
 
 ```json
 {
-  "format": "apex-pack-index",
+  "format": "atelier-pack-index",
   "name": "Example index",
   "packs": [
     {
@@ -129,9 +129,9 @@ An index is one https JSON file, at most 2 MB:
       "name": "Hello kit",
       "description": "Your companion on a little stage.",
       "version": "1.0.0",
-      "url": "https://packs.example.com/hello-kit-1.0.0.apexapp",
+      "url": "https://packs.example.com/hello-kit-1.0.0.atelierapp",
       "sha256": "<64 hex: the SHA-256 of the archive file>",
-      "author": "Apex examples",
+      "author": "Atelier examples",
       "kind": "app",
       "image": "https://packs.example.com/hello-kit-1.0.0.png",
       "category": "games",
@@ -170,13 +170,13 @@ installs.
 
 ```sh
 mkdir site
-cp hello-kit-1.0.0.apexapp hello-kit-1.0.0.png site/
+cp hello-kit-1.0.0.atelierapp hello-kit-1.0.0.png site/
 node tools/make-index.mjs site https://packs.example.com "Example index"
 # Wrote site/index.json with 1 pack.
 ```
 
 Host the folder over https (a static host, a GitHub repository's raw files or
-GitHub Pages) and add `<base url>/index.json` in Apex: Packs › **Browse** ›
+GitHub Pages) and add `<base url>/index.json` in Atelier: Packs › **Browse** ›
 **Add a community index**.
 
 **Big archives.** An app can be too big for an index repository. Upload it as
@@ -185,7 +185,7 @@ add the entry to `index.json` by hand. `make-index.mjs` keeps entries hosted
 elsewhere when it runs again.
 
 **Pictures.** A `.png` beside an archive with the same name becomes its
-`image`. Share… in Apex saves one.
+`image`. Share… in Atelier saves one.
 
 ## Withdrawing an item
 
@@ -195,22 +195,22 @@ Add its id to `withdrawn`, with a short reason:
 "withdrawn": [{ "id": "old-tally", "reason": "Replaced by vite-tally." }]
 ```
 
-- Apex stops offering it and its updates, even if an entry for it is still
+- Atelier stops offering it and its updates, even if an entry for it is still
   listed.
-- Installed copies keep working and show a notice with the reason. Apex never
+- Installed copies keep working and show a notice with the reason. Atelier never
   deletes anything.
 - The notice clears once every index can be read and none lists the id.
 - Indexes are read when the person opens Browse, and during the daily update
   check only if something they have came from an index.
 
-## The Apex community index
+## The Atelier community index
 
-Apex adds the Apex community index
-(`https://raw.githubusercontent.com/3SENN/apex-packs/main/index.json`) on
+Atelier adds the Atelier community index
+(`https://raw.githubusercontent.com/3SENN/atelier-packs/main/index.json`) on
 first run. A person can remove it and add others; if they remove every index,
 Browse offers it again with one click. Items are added by pull request to
-[apex-packs](https://github.com/3SENN/apex-packs). The index pins each
-author's key and checks every request: signatures and pins, hashes, Apex's
+[atelier-packs](https://github.com/3SENN/atelier-packs). The index pins each
+author's key and checks every request: signatures and pins, hashes, Atelier's
 file rules, and that the sources match the packs.
 
 It takes packs, apps and worlds. Archives up to 20 MB live in the
@@ -219,7 +219,7 @@ by its address and hash (`pack.mjs --entry` prints the entry), and the
 index's CI downloads and checks it. Every entry sits on a shelf (`category`)
 and may have a `color` and a picture. A bundled app names its source code in
 the manifest's `homepage`, for reviewers. The
-[apex-packs README](https://github.com/3SENN/apex-packs#share-what-you-made)
+[atelier-packs README](https://github.com/3SENN/atelier-packs#share-what-you-made)
 has the steps.
 
 What you may share there:
@@ -231,17 +231,17 @@ What you may share there:
 Not assets taken from someone else's game, and not other games' or
 companies' characters, names or logos. A project that started from someone
 else's game can ship its code and ask players for their own copy's files
-(`apex.files.own`).
+(`atelier.files.own`).
 
 ## Sharing a companion
 
-A companion is made in Apex (Settings › Companions), not by hand. It travels
+A companion is made in Atelier (Settings › Companions), not by hand. It travels
 two ways:
 
 | | A companion file | A pack with the companion |
 |---|---|---|
 | Made with | **Export…** on the companion's card | **Share as pack…** on the companion's menu in Settings › Companions, then **Export…** on the draft |
-| File | `.apexcompanion`: plain JSON, not signed | `.apexpack`: signed with your key |
+| File | `.ateliercompanion`: plain JSON, not signed | `.atelierpack`: signed with your key |
 | Carries | Its name, look, personality, standing instructions, model and effort; its own skills and routines if you choose; its memory only if you choose | The same, never its memory |
 | For | One person you trust | Anyone: a link, an index, the community index |
 

@@ -1,10 +1,10 @@
-// Tally: count anything; Apex remembers the count. Built with Vite into
+// Tally: count anything; Atelier remembers the count. Built with Vite into
 // pack/dist, which the manifest names as a "bundled" app's root.
 import './style.css'
 
-// window.apex exists only inside Apex. `npm run dev` opens the app in a normal
+// window.atelier exists only inside Atelier. `npm run dev` opens the app in a normal
 // browser, so a small stand-in keeps it usable there.
-const apex = window.apex ?? {
+const atelier = window.atelier ?? {
   storage: {
     get: async (key) => JSON.parse(localStorage.getItem(key) ?? 'null'),
     set: async (key, value) => localStorage.setItem(key, JSON.stringify(value)),
@@ -30,9 +30,9 @@ let count = 0
 async function set(next) {
   count = Math.max(0, next)
   out.textContent = String(count)
-  apex.test.ready({ count })
-  await apex.storage.set('count', count)
-  await apex.status.set({ text: count ? `${count} counted` : null, badge: count || null })
+  atelier.test.ready({ count })
+  await atelier.storage.set('count', count)
+  await atelier.status.set({ text: count ? `${count} counted` : null, badge: count || null })
 }
 
 document.getElementById('more').addEventListener('click', () => set(count + 1))
@@ -43,7 +43,7 @@ addEventListener('keydown', (event) => {
   if (event.key === 'ArrowDown' || event.key === '-') void set(count - 1)
 })
 
-apex.storage
+atelier.storage
   .get('count')
   .then((saved) => set(Number(saved) || 0))
   .catch(() => set(0))

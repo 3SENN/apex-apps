@@ -1,11 +1,11 @@
 {
-  "format": "apex-pack",
+  "format": "atelier-pack",
   "manifestVersion": 2,
   "id": "hello-kit",
   "name": "Hello kit",
   "version": "1.0.0",
-  "description": "Your companion on a little stage, drawn with the Apex kit. Say hi and it cheers up.",
-  "author": { "name": "Apex examples" },
+  "description": "Your companion on a little stage, drawn with the Atelier kit. Say hi and it cheers up.",
+  "author": { "name": "Atelier examples" },
   "contributes": {
     "apps": [
       {

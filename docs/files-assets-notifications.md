@@ -2,18 +2,18 @@
 
 ## Files: `permissions.files`
 
-One permission covers all of `apex.files`. The review says the pack "can open
+One permission covers all of `atelier.files`. The review says the pack "can open
 and save files you choose, keep a folder you pick, and ask for files of your
 own".
 
 ### Files the person picks
 
 ```js
-const files = await apex.files.open({ accept: ['.txt', '.md'], multiple: true })
+const files = await atelier.files.open({ accept: ['.txt', '.md'], multiple: true })
 // [{ name, size, data: Uint8Array }], [] when cancelled
 const text = new TextDecoder().decode(files[0].data)
 
-const { saved, name } = await apex.files.save('story.md', text) // the person picks where
+const { saved, name } = await atelier.files.save('story.md', text) // the person picks where
 ```
 
 - `open`: up to 50 files, 50 MB each. `accept` lists up to 30 extensions.
@@ -23,13 +23,13 @@ const { saved, name } = await apex.files.save('story.md', text) // the person pi
 ### A folder the person picks
 
 ```js
-const folder = await apex.files.folder()           // { name }, or null
-const entries = await apex.files.list('chapters')  // [{ name, kind: 'file' | 'folder', size }]
-const bytes = await apex.files.read('chapters/one.md')
-await apex.files.write('chapters/two.md', 'It was a quiet morning.')
+const folder = await atelier.files.folder()           // { name }, or null
+const entries = await atelier.files.list('chapters')  // [{ name, kind: 'file' | 'folder', size }]
+const bytes = await atelier.files.read('chapters/one.md')
+await atelier.files.write('chapters/two.md', 'It was a quiet morning.')
 ```
 
-- `folder()` asks once. Apex keeps the folder for the pack until the person
+- `folder()` asks once. Atelier keeps the folder for the pack until the person
   takes it back on the pack's page; later calls return it without asking.
 - Paths are relative to that folder, `/`-separated, and stay inside it.
 - `list` returns up to 2,000 entries; `read` and `write` handle up to 50 MB.
@@ -40,18 +40,18 @@ For data you can't ship: files from a game the person owns, their own photos
 or recordings.
 
 ```js
-const { files } = await apex.files.own({ folder: true, note: 'Choose the data folder from your copy of the game' })
-img.src = apex.files.ownUrl(files[0])
+const { files } = await atelier.files.own({ folder: true, note: 'Choose the data folder from your copy of the game' })
+img.src = atelier.files.ownUrl(files[0])
 ```
 
-- Apex copies what the person picks into the app's private space on this
+- Atelier copies what the person picks into the app's private space on this
   computer (up to 10,000 files and 2 GB) and serves it read-only inside the
   app's origin. `ownUrl(path)` is the address, at once.
 - The files never leave the computer and are never part of the pack: not in
   Export, Share…, Remix or an index. The pack's page lists their size and lets
   the person remove them.
 
-Apex's playtest refuses `apex.files` (nobody is there to pick a file).
+Atelier's playtest refuses `atelier.files` (nobody is there to pick a file).
 
 ## Asset slots and asset packs
 
@@ -72,15 +72,15 @@ level set.
 ```
 
 ```js
-img.src = apex.assets.url('art', 'backdrop.svg')
-const palette = await fetch(apex.assets.url('art', 'palette.json')).then((r) => r.json())
-const active = await apex.assets.active('art') // { pack, packName, set, setName } or null
+img.src = atelier.assets.url('art', 'backdrop.svg')
+const palette = await fetch(atelier.assets.url('art', 'palette.json')).then((r) => r.json())
+const active = await atelier.assets.active('art') // { pack, packName, set, setName } or null
 ```
 
 - A slot has an `id` (unique in the pack), a `name` (up to 60), a
   `description` (up to 500) and an optional `layout`: the app's own folder
   for the slot, inside its `root`. At most 10 slots an app.
-- `apex.assets.url(slot, path)` returns at once, so it works in `src`
+- `atelier.assets.url(slot, path)` returns at once, so it works in `src`
   attributes and CSS. It serves the chosen asset pack's file, or the app's own
   `<layout>/<path>` when no pack is chosen **or** the chosen pack lacks that
   file. A pack can replace just some files.
@@ -92,7 +92,7 @@ const active = await apex.assets.active('art') // { pack, packName, set, setName
 
 ```json
 {
-  "format": "apex-pack",
+  "format": "atelier-pack",
   "manifestVersion": 2,
   "id": "hello-kit-winter",
   "name": "Hello kit: winter",
@@ -118,16 +118,16 @@ See [hello-kit](../examples/hello-kit) and [winter-art](../examples/winter-art).
 ## Notifications: `permissions.notifications`
 
 ```js
-await apex.notify({ title: 'Your bread is ready', body: 'Come and take it out.' })
+await atelier.notify({ title: 'Your bread is ready', body: 'Come and take it out.' })
 
-await apex.notifications.schedule({ id: 'bread', at: Date.now() + 20 * 60_000, title: 'Your bread is ready', body: 'Come and take it out.' })
-await apex.notifications.cancel('bread')
-const pending = await apex.notifications.list()
+await atelier.notifications.schedule({ id: 'bread', at: Date.now() + 20 * 60_000, title: 'Your bread is ready', body: 'Come and take it out.' })
+await atelier.notifications.cancel('bread')
+const pending = await atelier.notifications.list()
 ```
 
 - `title` 1 to 120 characters, `body` up to 500.
-- A scheduled notification fires while Apex runs, **even with the app
-  closed**. One missed while Apex was closed fires when it starts again, if
+- A scheduled notification fires while Atelier runs, **even with the app
+  closed**. One missed while Atelier was closed fires when it starts again, if
   it is less than an hour late.
 - The same `id` replaces the earlier one. At most 50, up to 30 days ahead.
 - Clicking one opens the app, or brings its open tab forward. For a pack with
@@ -145,7 +145,7 @@ Install with the least, and ask for the rest when a feature needs it:
 ```
 
 ```js
-const { granted } = await apex.permissions.request({ notifications: true })
+const { granted } = await atelier.permissions.request({ notifications: true })
 if (!granted) showWhyItHelps()
 ```
 

@@ -9,13 +9,13 @@ A pack is public: everyone who installs it has every file in it.
 - **Your own keys** (database, payment provider, the model API your server
   calls) stay on your server, in its environment. The app talks to your
   server.
-- **The person's keys** go in `secrets`. Apex keeps them in the keychain and
+- **The person's keys** go in `secrets`. Atelier keeps them in the keychain and
   adds them to requests to their hosts; your code never reads them.
-- **Company sign-in** goes in `auth`. Apex runs it and adds the token; your
+- **Company sign-in** goes in `auth`. Atelier runs it and adds the token; your
   code never sees one.
 - **`env` is public.** Put addresses and switches there, never a key.
 - **`.env` is for your computer.** Commit a `.env.example` with placeholders,
-  and keep `.env` and `.env.local` in `.gitignore`. Apex and `pack.mjs` never
+  and keep `.env` and `.env.local` in `.gitignore`. Atelier and `pack.mjs` never
   pack them.
 - **Your signing key** (`*.pem`) never goes in a repository.
 
@@ -26,7 +26,7 @@ See [servers-keys-and-sign-in.md](servers-keys-and-sign-in.md).
 Every permission is a line on the review that the person has to accept.
 
 - List only what the app uses on day one. Put the rest in
-  `optionalPermissions` and call `apex.permissions.request(...)` when the
+  `optionalPermissions` and call `atelier.permissions.request(...)` when the
   person picks the feature that needs it, with a sentence that says why.
 - An app rarely needs `sites`. A pack with both `sites` and `network` gets
   the most serious line on the review: "Can read … and send what it reads
@@ -45,10 +45,10 @@ calls, names in the cast, files the person opens: all of it is untrusted.
 - Put text in the page with `textContent`, never `innerHTML`. If you must
   render rich text, use a sanitiser and an allowlist of tags.
 - Never pass it to `eval`, `new Function` or `setTimeout(string)`.
-- Check structured data before you use it, even from `apex.ai.json`.
+- Check structured data before you use it, even from `atelier.ai.json`.
 - Text the model reads can steer it. Tell it in `system` that the material is
   not instructions, and wrap the material in markers.
-- Give `apex.ai.session` tools that each do one safe thing. Ask the person
+- Give `atelier.ai.session` tools that each do one safe thing. Ask the person
   before a tool does something they would want to approve.
 
 ### Respect the cast
@@ -63,7 +63,7 @@ calls, names in the cast, files the person opens: all of it is untrusted.
 Your own art, sound and code; assets you licensed; open-licensed assets with
 their credits. Not assets, characters, names or logos from someone else's
 game or company. For data a player owns but you can't ship, use
-`apex.files.own`.
+`atelier.files.own`.
 
 ## UX
 
@@ -74,21 +74,21 @@ Every state the person can reach has a sentence and a way forward.
 | State | Show |
 |---|---|
 | A server can't be reached | What failed, and **Try again** |
-| 401 from your API, no key yet | **Add your key…** (`apex.secrets.request`) |
-| Signed out, or the sign-in ran out | **Sign in** (`apex.auth.signIn`) |
-| A connector isn't connected | **Connect…** (`apex.connectors.connect`) |
+| 401 from your API, no key yet | **Add your key…** (`atelier.secrets.request`) |
+| Signed out, or the sign-in ran out | **Sign in** (`atelier.auth.signIn`) |
+| A connector isn't connected | **Connect…** (`atelier.connectors.connect`) |
 | A connector has no fitting tool on | Which tool to turn on in Connectors |
 | An empty cast | A stand-in character and **Pick who plays** |
-| The model budget is used up | The message Apex gives, and keep the button for later |
+| The model budget is used up | The message Atelier gives, and keep the button for later |
 | No engine set up | The message, and what still works without the model |
 | A refused optional permission | What the feature needs, and the button again later |
 
-All `apex.*` refusals reject with a sentence written for people. Catch every
+All `atelier.*` refusals reject with a sentence written for people. Catch every
 call and show it near what the person was doing.
 
 ### Handle the empty cast
 
-`apex.cast.members()` can be `[]` (in a playtest, or before the person has a
+`atelier.cast.members()` can be `[]` (in a playtest, or before the person has a
 companion). Draw a stand-in shape and offer **Pick who plays**, as
 [hello-kit](../examples/hello-kit) does.
 
@@ -107,21 +107,21 @@ anything that runs on its own.
 ### Render model output as text
 
 Use `textContent`, show streamed text as it arrives
-(`apex.ai.stream({ onText })`), and keep the layout steady while it grows.
+(`atelier.ai.stream({ onText })`), and keep the layout steady while it grows.
 
-### Feel at home in Apex
+### Feel at home in Atelier
 
 - Follow the system theme: `color-scheme: light dark` and
   `prefers-color-scheme`.
 - Work with the keyboard: real `<button>`s, visible focus, no keyboard traps.
 - Announce changes: `role="status"` or `aria-live="polite"` on messages.
 - Respect `prefers-reduced-motion` for anything that moves a lot.
-- Use `apex.status.set` for a short glanceable state on the sidebar row
+- Use `atelier.status.set` for a short glanceable state on the sidebar row
   (a badge, up to 40 characters of text, progress). Clear it when it no longer
   means anything.
 - Ask for `"sidebar": true` only if people will come back often. The command
   bar always offers "Open <app>".
-- Keep state (`apex.storage`, IndexedDB) so reopening the app continues where
+- Keep state (`atelier.storage`, IndexedDB) so reopening the app continues where
   the person left off.
 
 ## Performance
@@ -140,7 +140,7 @@ Use `textContent`, show streamed text as it arrives
 
 - Load big assets when the person gets to them, not at start.
 - Show something within a second: a title, a stand-in, a progress bar
-  (`apex.status.set({ progress })`).
+  (`atelier.status.set({ progress })`).
 - Fetch only what the current screen needs.
 
 ### Nothing running when closed
@@ -150,7 +150,7 @@ Use `textContent`, show streamed text as it arrives
 - A game that keeps time (bread that bakes while you're away) stores a
   timestamp and catches up from the clock when it opens again.
 - To reach the person later, schedule a notification
-  (`apex.notifications.schedule`). It fires while Apex runs, even with the app
+  (`atelier.notifications.schedule`). It fires while Atelier runs, even with the app
   closed.
 - No polling loops in a page that may be hidden; refresh when the page
   becomes visible (`visibilitychange`).
@@ -166,17 +166,17 @@ Use `textContent`, show streamed text as it arrives
 
 ## Testing
 
-### Report state with `apex.test.ready`
+### Report state with `atelier.test.ready`
 
 ```js
-apex.test?.ready({ score, level, x: Math.round(player.x) })
+atelier.test?.ready({ score, level, x: Math.round(player.x) })
 ```
 
-Companions build and remix apps with Apex's playtest (`test_pack`), which
+Companions build and remix apps with Atelier's playtest (`test_pack`), which
 loads the app off-screen, presses keys, clicks, takes frames and reads the
-last state the app reported. Call `apex.test.ready(state)` with what matters
+last state the app reported. Call `atelier.test.ready(state)` with what matters
 (score, position, step, how many items) whenever it changes; every frame is
-fine, as Apex sends it only when it changes. Outside a playtest it does
+fine, as Atelier sends it only when it changes. Outside a playtest it does
 nothing.
 
 ### Make the playtest run
@@ -184,8 +184,8 @@ nothing.
 In a playtest:
 
 - the cast is empty;
-- model calls return stand-ins (`apex.ai.json` returns `null`);
-- `apex.files` is refused;
+- model calls return stand-ins (`atelier.ai.json` returns `null`);
+- `atelier.files` is refused;
 - there are no keys, sign-ins or connectors;
 - the network reaches only `localhost` and hosts an installed version of the
   pack may already reach.

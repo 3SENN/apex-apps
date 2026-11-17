@@ -6,7 +6,7 @@ instead of guessing.
 
 What it shows:
 
-- `permissions.model`: `apex.ai.decide` with two typed questions per
+- `permissions.model`: `atelier.ai.decide` with two typed questions per
   message. `topic` is a `choice` (billing, bug, question or other, each with a
   description or `null`). `urgency` is a `score` on three steps: Can wait,
   Today, Right now.
@@ -19,7 +19,7 @@ What it shows:
 - Every refusal (no engine set up, the budget) shows as a sentence on that
   message's row, so the person is never stuck.
 - Rows are text (`textContent`), never HTML.
-- `apex.test?.ready({ sorted })` after each run for Apex's playtest.
+- `atelier.test?.ready({ sorted })` after each run for Atelier's playtest.
 
 The review lists: "Can ask your Claude model one-off questions, which counts
 toward your usage" and "Adds an app: Sorter".
@@ -52,14 +52,14 @@ How do I change my email address?
   once.
 - A `score` counts its steps from 0 and can land between two: the sorter
   rounds it to name a step.
-- In Apex's playtest, a pack not yet allowed the model gets `null` from
+- In Atelier's playtest, a pack not yet allowed the model gets `null` from
   `decide`. The sorter shows "no answer" on that row.
 
 ## Files
 
 ```
-apex-pack.json
-app/index.html   the entry page (links Apex UI first)
+atelier-pack.json
+app/index.html   the entry page (links Atelier UI first)
 app/main.js      the questions, the calls and the rows
 app/style.css
 ```

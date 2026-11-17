@@ -1,11 +1,11 @@
 {
-  "format": "apex-pack",
+  "format": "atelier-pack",
   "manifestVersion": 2,
   "id": "phone-controller",
   "name": "Phone controller",
   "version": "1.0.0",
   "description": "Phones on the same Wi-Fi scan a QR code and become controllers: tilt, A, B, Home and a pointer pad.",
-  "author": { "name": "Apex examples" },
+  "author": { "name": "Atelier examples" },
   "contributes": {
     "apps": [
       {

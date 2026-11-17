@@ -1,25 +1,25 @@
-# Apex for organisations
+# Atelier for organisations
 
-For IT admins. Apex reads policies the way Chrome reads its enterprise
+For IT admins. Atelier reads policies the way Chrome reads its enterprise
 policies: from the registry on Windows, a configuration profile on macOS and a
 file on Linux. They decide which packs your people can install and from
 where, how far any pack may go, and how your own apps are configured.
 
-Without a policy, Apex behaves as it does for everyone: every rule here is a
+Without a policy, Atelier behaves as it does for everyone: every rule here is a
 no-op.
 
 ## Where policies live
 
 | System | Where | Format |
 |---|---|---|
-| Windows | `HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Apex` (every user), then `HKEY_CURRENT_USER\SOFTWARE\Policies\Apex` (one user) | One named value per policy, directly under the key. Lists and objects are JSON text on one line in a string value (`REG_SZ`). `true`/`false` is a `REG_DWORD`, `1`/`0`. For a policy set in both, the machine's value wins. |
-| macOS | A configuration profile for the preference domain `com.apex.browser` (read from `/Library/Managed Preferences/`) | One key per policy: plist arrays, dictionaries and booleans, or JSON text in a string. The computer-level profile wins over a user-level one. |
-| Linux | `/etc/apex/policies.json` | One JSON object with a key per policy. |
+| Windows | `HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Atelier` (every user), then `HKEY_CURRENT_USER\SOFTWARE\Policies\Atelier` (one user) | One named value per policy, directly under the key. Lists and objects are JSON text on one line in a string value (`REG_SZ`). `true`/`false` is a `REG_DWORD`, `1`/`0`. For a policy set in both, the machine's value wins. |
+| macOS | A configuration profile for the preference domain `com.atelier.browser` (read from `/Library/Managed Preferences/`) | One key per policy: plist arrays, dictionaries and booleans, or JSON text in a string. The computer-level profile wins over a user-level one. |
+| Linux | `/etc/atelier/policies.json` | One JSON object with a key per policy. |
 
-- Apex reads the policy once, in the background, shortly after it starts. It
-  never delays start-up. **Restart Apex after you change a policy.**
+- Atelier reads the policy once, in the background, shortly after it starts. It
+  never delays start-up. **Restart Atelier after you change a policy.**
 - Each value is checked on its own. A value that doesn't parse is ignored and
-  noted in Apex's log; the others still apply.
+  noted in Atelier's log; the others still apply.
 - With any policy set, the Packs page says "Your organisation manages some of
   this."
 
@@ -28,7 +28,7 @@ the value's shape everywhere) and as a `.reg` file for Windows. To use a
 `.reg` example: change the addresses to yours, save it as an ASCII `.reg` file
 and run `reg import <file>.reg` as an administrator, or set the same values
 with Group Policy Preferences (Registry items) or your MDM. Use
-`HKEY_CURRENT_USER` instead to set a policy for one user. Apex doesn't ship an
+`HKEY_CURRENT_USER` instead to set a policy for one user. Atelier doesn't ship an
 ADMX template.
 
 ## What applies when
@@ -39,7 +39,7 @@ ADMX template.
   the policy refuses.
 - **Where a pack may come from** (`PackSideloading`, `PackIndexes`) applies to
   new installs. A pack already installed keeps working.
-- **Force-installed packs**, and the packs Apex itself brings, are always let
+- **Force-installed packs**, and the packs Atelier itself brings, are always let
   in.
 
 ## The policies
@@ -67,7 +67,7 @@ these.
 {
   "PackIndexes": [
     "https://packs.contoso.example/index.json",
-    "https://raw.githubusercontent.com/3SENN/apex-packs/main/index.json"
+    "https://raw.githubusercontent.com/3SENN/atelier-packs/main/index.json"
   ]
 }
 ```
@@ -75,14 +75,14 @@ these.
 ```reg
 Windows Registry Editor Version 5.00
 
-[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Apex]
-"PackIndexes"="[\"https://packs.contoso.example/index.json\",\"https://raw.githubusercontent.com/3SENN/apex-packs/main/index.json\"]"
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Atelier]
+"PackIndexes"="[\"https://packs.contoso.example/index.json\",\"https://raw.githubusercontent.com/3SENN/atelier-packs/main/index.json\"]"
 ```
 
 - Up to 20 https addresses. Each entry is an address, or an object
   `{ "url", "name", "auth" }` (below).
 - The list is the whole of Browse: people can't add or remove indexes. To
-  offer the Apex community index too, list it as above.
+  offer the Atelier community index too, list it as above.
 
 ### A private index
 
@@ -96,7 +96,7 @@ An index behind your company's sign-in:
       "name": "Contoso apps",
       "auth": {
         "issuer": "https://login.contoso.example",
-        "clientId": "apex-index",
+        "clientId": "atelier-index",
         "scopes": ["openid", "email", "offline_access"]
       }
     }
@@ -107,8 +107,8 @@ An index behind your company's sign-in:
 ```reg
 Windows Registry Editor Version 5.00
 
-[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Apex]
-"PackIndexes"="[{\"url\":\"https://apps.contoso.example/index.json\",\"name\":\"Contoso apps\",\"auth\":{\"issuer\":\"https://login.contoso.example\",\"clientId\":\"apex-index\",\"scopes\":[\"openid\",\"email\",\"offline_access\"]}}]"
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Atelier]
+"PackIndexes"="[{\"url\":\"https://apps.contoso.example/index.json\",\"name\":\"Contoso apps\",\"auth\":{\"issuer\":\"https://login.contoso.example\",\"clientId\":\"atelier-index\",\"scopes\":[\"openid\",\"email\",\"offline_access\"]}}]"
 ```
 
 - Browse reads it only once someone has signed in. Until then it shows that
@@ -130,9 +130,9 @@ removed. Their pages say your organisation installed them.
 ```json
 {
   "PackForceInstall": [
-    "https://apps.contoso.example/contoso-dashboard.apexapp",
+    "https://apps.contoso.example/contoso-dashboard.atelierapp",
     {
-      "url": "https://apps.contoso.example/contoso-helpdesk-2.1.0.apexapp",
+      "url": "https://apps.contoso.example/contoso-helpdesk-2.1.0.atelierapp",
       "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
     }
   ]
@@ -142,16 +142,16 @@ removed. Their pages say your organisation installed them.
 ```reg
 Windows Registry Editor Version 5.00
 
-[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Apex]
-"PackForceInstall"="[\"https://apps.contoso.example/contoso-dashboard.apexapp\",{\"url\":\"https://apps.contoso.example/contoso-helpdesk-2.1.0.apexapp\",\"sha256\":\"0000000000000000000000000000000000000000000000000000000000000000\"}]"
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Atelier]
+"PackForceInstall"="[\"https://apps.contoso.example/contoso-dashboard.atelierapp\",{\"url\":\"https://apps.contoso.example/contoso-helpdesk-2.1.0.atelierapp\",\"sha256\":\"0000000000000000000000000000000000000000000000000000000000000000\"}]"
 ```
 
 - Up to 50 https addresses, each an address or `{ "url", "sha256" }`.
-- Apex downloads each address once, checks the file's SHA-256 when you give
+- Atelier downloads each address once, checks the file's SHA-256 when you give
   one (`pack.mjs --entry` prints it; the zeros above are a placeholder), and
   installs it through the same checks as any install.
 - Newer versions arrive like any pack's: through the pack's own `updateUrl`.
-  Apex doesn't download an address again for a pack it already has.
+  Atelier doesn't download an address again for a pack it already has.
 
 ## PackAllowlist and PackBlocklist
 
@@ -165,7 +165,7 @@ Windows Registry Editor Version 5.00
 ```reg
 Windows Registry Editor Version 5.00
 
-[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Apex]
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Atelier]
 "PackBlocklist"="[\"*\"]"
 "PackAllowlist"="[\"contoso-dashboard\",\"notes-tool\",\"key:1a2b3c4d5e6f7a8b\"]"
 ```
@@ -194,14 +194,14 @@ organisation".
 ```reg
 Windows Registry Editor Version 5.00
 
-[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Apex]
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Atelier]
 "PackTrustedKeys"="[\"1a2b3c4d5e6f7a8b\"]"
 ```
 
 - Up to 50 key ids (16 lowercase hex characters).
 - Make one key for your organisation's packs
   (`node tools/pack.mjs --new-key`), keep the private key in your release
-  pipeline's secret store, and sign every version with it: Apex pins each pack
+  pipeline's secret store, and sign every version with it: Atelier pins each pack
   to the key that signed its first install.
 
 ## PackPermissionCeiling
@@ -229,7 +229,7 @@ optional permissions, is refused, and an installed one stops.
 ```reg
 Windows Registry Editor Version 5.00
 
-[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Apex]
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Atelier]
 "PackPermissionCeiling"="{\"network\":[\"*.contoso.example\"],\"sites\":[\"*.contoso.example\"],\"model\":true,\"files\":false,\"notifications\":true,\"clipboard\":true,\"pageScripts\":false,\"secrets\":false,\"localConnectors\":false,\"connectors\":[\"atlassian\",\"github\"]}"
 ```
 
@@ -264,7 +264,7 @@ folder…**, and says why. Packs already installed keep working.
 ```reg
 Windows Registry Editor Version 5.00
 
-[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Apex]
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Atelier]
 "PackSideloading"=dword:00000000
 ```
 
@@ -279,7 +279,7 @@ Windows Registry Editor Version 5.00
 ```reg
 Windows Registry Editor Version 5.00
 
-[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Apex]
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Atelier]
 "PackAuditLog"=dword:00000001
 ```
 
@@ -321,16 +321,16 @@ servers and tenant.
 ```reg
 Windows Registry Editor Version 5.00
 
-[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Apex]
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Atelier]
 "AppConfig"="{\"contoso-dashboard\":{\"env\":{\"API_URL\":\"https://api.contoso.example/eu\",\"TEAM\":\"Operations\"},\"auth\":{\"corp\":{\"issuer\":\"https://login.contoso.example/eu\",\"clientId\":\"contoso-dashboard-eu\",\"scopes\":[\"openid\",\"email\",\"offline_access\",\"tasks.read\"]}}},\"server-notes\":{\"env\":{\"SERVER_URL\":\"https://notes.contoso.example\"},\"secrets\":{\"NOTES_TOKEN\":\"replace-with-a-service-token\"}}}"
 ```
 
 - `env`: values for `env` names the pack declares, and only those, up to 2,000
   characters each. They win over the manifest's values. The app reads them as
-  `apex.env` as always.
+  `atelier.env` as always.
 - `secrets`: values for secrets the pack declares, up to 8,192 characters. The
   pack's **Keys** show "Set by your organisation", the person can't change
-  them, the app's code never sees them, and Apex sends each only to its
+  them, the app's code never sees them, and Atelier sends each only to its
   secret's hosts.
 - `auth`: per sign-in id, the `issuer`, `clientId` and `scopes` to use. The
   pack's page says it was set up by your organisation. For Microsoft Entra ID
@@ -357,21 +357,21 @@ Your own model gateway: any endpoint that speaks Anthropic's Messages API.
 ```reg
 Windows Registry Editor Version 5.00
 
-[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Apex]
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Atelier]
 "AiProvider"="{\"url\":\"https://ai.contoso.example\",\"token\":\"replace-with-the-gateway-token\",\"models\":{\"fast\":\"contoso-fast\",\"smart\":\"contoso-smart\"}}"
 ```
 
-- Apex posts to `<url>/v1/messages`.
+- Atelier posts to `<url>/v1/messages`.
 - Give `key` (sent as `x-api-key`) or `token` (sent as `Authorization: Bearer`),
   exactly one.
 - `models` names the gateway's models for the `fast` and `smart` tiers. Leave
   it out if the gateway takes Claude's model names.
-- Every model call a pack makes (`apex.ai`, `apex.ask`, companions' lines in
+- Every model call a pack makes (`atelier.ai`, `atelier.ask`, companions' lines in
   apps, residents' lines in worlds) goes there instead of the person's own
   account, under the same budget (60 calls an hour and 500 a day per pack).
   The Packs page says "Apps use your organisation's AI service, not your own
   model account."
-- Apex's own chats are not affected.
+- Atelier's own chats are not affected.
 - As with `AppConfig` secrets, people who can read the policy can read the
   token: scope it to the gateway.
 
@@ -390,12 +390,12 @@ limited to your domain, an audit log, and your own model gateway. Add
       "name": "Contoso apps",
       "auth": {
         "issuer": "https://login.contoso.example",
-        "clientId": "apex-index",
+        "clientId": "atelier-index",
         "scopes": ["openid", "email", "offline_access"]
       }
     }
   ],
-  "PackForceInstall": ["https://apps.contoso.example/contoso-dashboard.apexapp"],
+  "PackForceInstall": ["https://apps.contoso.example/contoso-dashboard.atelierapp"],
   "PackTrustedKeys": ["1a2b3c4d5e6f7a8b"],
   "PackSideloading": false,
   "PackAuditLog": true,
@@ -420,9 +420,9 @@ limited to your domain, an audit log, and your own model gateway. Add
 ```reg
 Windows Registry Editor Version 5.00
 
-[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Apex]
-"PackIndexes"="[{\"url\":\"https://apps.contoso.example/index.json\",\"name\":\"Contoso apps\",\"auth\":{\"issuer\":\"https://login.contoso.example\",\"clientId\":\"apex-index\",\"scopes\":[\"openid\",\"email\",\"offline_access\"]}}]"
-"PackForceInstall"="[\"https://apps.contoso.example/contoso-dashboard.apexapp\"]"
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Atelier]
+"PackIndexes"="[{\"url\":\"https://apps.contoso.example/index.json\",\"name\":\"Contoso apps\",\"auth\":{\"issuer\":\"https://login.contoso.example\",\"clientId\":\"atelier-index\",\"scopes\":[\"openid\",\"email\",\"offline_access\"]}}]"
+"PackForceInstall"="[\"https://apps.contoso.example/contoso-dashboard.atelierapp\"]"
 "PackTrustedKeys"="[\"1a2b3c4d5e6f7a8b\"]"
 "PackSideloading"=dword:00000000
 "PackAuditLog"=dword:00000001
@@ -431,10 +431,10 @@ Windows Registry Editor Version 5.00
 "AiProvider"="{\"url\":\"https://ai.contoso.example\",\"token\":\"replace-with-the-gateway-token\"}"
 ```
 
-On Linux, save the JSON as `/etc/apex/policies.json`.
+On Linux, save the JSON as `/etc/atelier/policies.json`.
 
 On macOS, deliver the same keys in a configuration profile for
-`com.apex.browser`, for example as a custom settings payload in your MDM. The
+`com.atelier.browser`, for example as a custom settings payload in your MDM. The
 preference list looks like this (lists and objects may also be JSON text in
 a string, as on Windows):
 
@@ -453,7 +453,7 @@ a string, as on Windows):
   </array>
   <key>PackForceInstall</key>
   <array>
-    <string>https://apps.contoso.example/contoso-dashboard.apexapp</string>
+    <string>https://apps.contoso.example/contoso-dashboard.atelierapp</string>
   </array>
   <key>AppConfig</key>
   <string>{"contoso-dashboard":{"auth":{"corp":{"issuer":"https://login.contoso.example/eu","clientId":"contoso-dashboard-eu"}}}}</string>
@@ -482,4 +482,4 @@ app and its policy files.
   removes it.
 - Keys and sign-in tokens are encrypted with the system keychain, outside the
   pack's storage.
-- Nothing about an app goes to Apex's servers.
+- Nothing about an app goes to Atelier's servers.

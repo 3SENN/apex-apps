@@ -1,6 +1,6 @@
-# The manifest: `apex-pack.json`
+# The manifest: `atelier-pack.json`
 
-Every pack has an `apex-pack.json` at the root of its folder. Apex checks it,
+Every pack has an `atelier-pack.json` at the root of its folder. Atelier checks it,
 and the files it names, every time it reads the pack: when you load a folder,
 open an archive, install from a link or an index, and update.
 
@@ -10,14 +10,14 @@ General rules:
 - **Unknown keys are refused**, at every level. A typo is a problem on the
   review, not a silent no-op.
 - Strings marked *text* are trimmed and may not be empty.
-- A manifest with a `manifestVersion` newer than the Apex reading it is
-  refused with "made for a newer version of Apex".
+- A manifest with a `manifestVersion` newer than the Atelier reading it is
+  refused with "made for a newer version of Atelier".
 
 ## Top level
 
 | Field | Type | Default | Rules |
 |---|---|---|---|
-| `format` | `"apex-pack"` | required | Exactly this. |
+| `format` | `"atelier-pack"` | required | Exactly this. |
 | `manifestVersion` | `1` or `2` | required | `2` for apps, worlds, `optionalPermissions`, `provides`, `uses`, `events`, `requires`, `secrets`, `env`, `auth` and `permissions.connectors`. Use `2`. |
 | `id` | string | required | `^[a-z0-9][a-z0-9-]{1,31}$`: 2 to 32 lowercase letters, digits and dashes. |
 | `name` | text | required | Up to 80 characters. |
@@ -33,7 +33,7 @@ General rules:
 | `optionalPermissions` | object | none | What it may ask for later. |
 | `secrets` | array | none | Keys the person enters. |
 | `env` | object | none | Public settings. |
-| `auth` | array | none | Sign-ins Apex runs. |
+| `auth` | array | none | Sign-ins Atelier runs. |
 | `provides` | array | none | Services for other packs. |
 | `uses` | array | none | Services it needs. |
 | `events` | object | none | Events it sends and hears. |
@@ -60,7 +60,7 @@ are `^[a-z0-9][a-z0-9-]{0,31}$` and unique within their list.
 | `orientation` | `"any"`, `"landscape"`, `"portrait"` | none | |
 | `isolated` | boolean | `false` | Serves the app cross-origin isolated (COOP `same-origin`, COEP `require-corp`) for `SharedArrayBuffer`: threaded WebAssembly. Everything it loads from a network host must then allow it. |
 | `eval` | boolean | `false` | Lets its scripts use `eval` and `new Function`. A notice on the review. |
-| `kit` | integer | none | The kit major it builds on. Only `1` exists. With it, the app's pages get an import map for `three`, `three/addons/…` and `apex-kit/…`. Set it when you import from the kit. |
+| `kit` | integer | none | The kit major it builds on. Only `1` exists. With it, the app's pages get an import map for `three`, `three/addons/…` and `atelier-kit/…`. Set it when you import from the kit. |
 | `cast` | `{ min, max }` | none | It uses the person's companions as characters. `min` 0 to 8, `max` 1 to 8, `min` ≤ `max`. |
 | `assets` | array (at most 10) | none | Slots asset packs may fill: `{ id, name (up to 60), description (up to 500), layout? }`. Slot ids are unique within the pack; `layout` is a folder inside the app's `root`. |
 
@@ -108,17 +108,17 @@ All optional. What a pack doesn't list, it can't do.
 
 | Field | Type | Default | What it allows |
 |---|---|---|---|
-| `network` | host list (up to 50) | `[]` | Requests to these hosts: an app's own `fetch`, WebSocket, EventSource, images and media, and `apex.fetch` / `apex.open` from any page. https and wss; http and ws only for `localhost` and `127.0.0.1`. `"*"` is refused. |
-| `sites` | host list (up to 100) | `[]` | Reading pages on these sites (`apex.page.*`) and boosts. `["*"]` means every site (never sign-in pages). |
-| `model` | boolean | `false` | `apex.ai.*` and `apex.ask` on the person's engine. |
-| `speak` | boolean | `false` | `apex.cast.speak`. Needs `model` and an app with `cast`. |
-| `files` | boolean | `false` | `apex.files.*`. |
-| `notifications` | boolean | `false` | `apex.notify` and `apex.notifications.*`. |
-| `clipboard` | boolean | `false` | `apex.clipboard.write`. |
-| `worlds` | boolean | `false` | `apex.worlds.*`: lists, reads, changes and opens the person's worlds. |
+| `network` | host list (up to 50) | `[]` | Requests to these hosts: an app's own `fetch`, WebSocket, EventSource, images and media, and `atelier.fetch` / `atelier.open` from any page. https and wss; http and ws only for `localhost` and `127.0.0.1`. `"*"` is refused. |
+| `sites` | host list (up to 100) | `[]` | Reading pages on these sites (`atelier.page.*`) and boosts. `["*"]` means every site (never sign-in pages). |
+| `model` | boolean | `false` | `atelier.ai.*` and `atelier.ask` on the person's engine. |
+| `speak` | boolean | `false` | `atelier.cast.speak`. Needs `model` and an app with `cast`. |
+| `files` | boolean | `false` | `atelier.files.*`. |
+| `notifications` | boolean | `false` | `atelier.notify` and `atelier.notifications.*`. |
+| `clipboard` | boolean | `false` | `atelier.clipboard.write`. |
+| `worlds` | boolean | `false` | `atelier.worlds.*`: lists, reads, changes and opens the person's worlds. |
 | `connectors` | list (up to 10) | `[]` | The person's connectors this pack's apps use, by directory id (`atlassian`, `github`) or a server's name: `^[a-z0-9][a-z0-9-]{0,63}$`, no duplicates. |
 | `pageScripts` | boolean | `false` | Boost scripts. Needs at least one boost with `js`. |
-| `server` | `{}` or `{ "lan": true }` | none | `apex.server.*`: a small web server the app's own page runs. `{}` for this computer only; `{ "lan": true }` for phones and computers on the same Wi-Fi too (a warning line on the review; an update that adds it asks again). Needs an app. See [api.md](api.md#a-server-on-this-computer-apps). |
+| `server` | `{}` or `{ "lan": true }` | none | `atelier.server.*`: a small web server the app's own page runs. `{}` for this computer only; `{ "lan": true }` for phones and computers on the same Wi-Fi too (a warning line on the review; an update that adds it asks again). Needs an app. See [api.md](api.md#a-server-on-this-computer-apps). |
 
 Least privilege is enforced: `network`, `model`, `notifications`,
 `clipboard`, `files`, `worlds`, `connectors`, `secrets`, `auth` and
@@ -137,7 +137,7 @@ a card), and `server` needs an app.
 ## `optionalPermissions`
 
 What the pack may ask for while it runs, one feature at a time, with
-`apex.permissions.request(...)`. Nothing here is granted at install.
+`atelier.permissions.request(...)`. Nothing here is granted at install.
 
 | Field | Type |
 |---|---|
@@ -159,7 +159,7 @@ Keys and tokens the person enters for their own accounts. At most 10.
 | `id` | string | Like an environment variable: `^[A-Z][A-Z0-9_]{0,63}$`. Unique. |
 | `name` | text | Up to 60. What the person is asked for. |
 | `description` | text | Up to 300. Where to find it. |
-| `hosts` | host list (1 to 10) | Where Apex sends it. Each must be in `permissions.network` or `optionalPermissions.network`; a wildcard host needs a wildcard at least as wide there. `"*"` refused. |
+| `hosts` | host list (1 to 10) | Where Atelier sends it. Each must be in `permissions.network` or `optionalPermissions.network`; a wildcard host needs a wildcard at least as wide there. `"*"` refused. |
 | `header` | string | The request header, `^[A-Za-z0-9-]{1,64}$`. Not one the browser owns: `Cookie`, `Host`, `Origin`, `Referer`, `Connection`, `Content-Length`, `Content-Type`, `Keep-Alive`, `TE`, `Trailer`, `Transfer-Encoding`, `Upgrade`, `Via`, `Proxy-*`, `Sec-*`. |
 | `prefix` | string | Up to 40 characters, no control characters, written before the value (`"Bearer "`). |
 
@@ -167,13 +167,13 @@ A value the person enters is one line of up to 8,192 characters.
 
 ## `env`
 
-Public settings the pack's pages read as `apex.env.NAME`.
+Public settings the pack's pages read as `atelier.env.NAME`.
 
 - At most 50 names, `^[A-Z][A-Z0-9_]{0,63}$`, each value a string of up to
   2,000 characters.
 - A name can't also be a secret.
 - A value that looks like a key is refused, because `env` is readable by
-  everyone who installs the pack. Apex knows the formats of Anthropic and
+  everyone who installs the pack. Atelier knows the formats of Anthropic and
   OpenAI API keys, AWS access keys, GitHub and Slack tokens, Stripe secret
   and restricted keys, SendGrid keys, Google OAuth client secrets, private
   keys and Supabase service keys, and also catches `password: "…"` and the
@@ -182,14 +182,14 @@ Public settings the pack's pages read as `apex.env.NAME`.
 
 ## `auth`
 
-Sign-ins Apex runs (OAuth 2 or OpenID Connect, authorization code with PKCE).
+Sign-ins Atelier runs (OAuth 2 or OpenID Connect, authorization code with PKCE).
 At most 4.
 
 | Field | Type | Rules |
 |---|---|---|
 | `id` | string | `^[a-z][a-z0-9-]{0,31}$`. Unique. |
 | `name` | text | Up to 60. What the person signs in with ("Contoso account"). |
-| `issuer` | string | The identity provider's https address (http only on `localhost` or `127.0.0.1`), no query or `#`. Apex reads its metadata under `/.well-known/`. |
+| `issuer` | string | The identity provider's https address (http only on `localhost` or `127.0.0.1`), no query or `#`. Atelier reads its metadata under `/.well-known/`. |
 | `clientId` | string | 1 to 200 characters, no control characters. A public client (no secret). |
 | `scopes` | list (up to 20) | Each 1 to 200 printable characters, no spaces or quotes. |
 | `hosts` | host list (1 to 10) | Where the access token goes. Each in `permissions.network` or `optionalPermissions.network`. A host can't get both a sign-in and a secret in `Authorization`. |
@@ -200,9 +200,9 @@ See [servers-keys-and-sign-in.md](servers-keys-and-sign-in.md).
 
 | Field | Shape | Rules |
 |---|---|---|
-| `provides` | `[{ service, description (500), methods, module?, agent? }]`, at most 10 | `service` `^[a-z][a-z0-9-]{1,47}$`, not one of Apex's own names (`ai`, `apex`, `assets`, `auth`, `cast`, `connectors`, `events`, `files`, `guide`, `kit`, `notify`, `pad`, `rooms`, `status`, `storage`, `world`). `methods`: 1 to 30, names `^[a-z][A-Za-z0-9_]{0,31}$`, each `{ description?, input }` with `input` a JSON Schema object. `module`: a `.js`/`.mjs` file outside app folders. |
-| `uses` | list of service names, at most 20 | Not its own services; no duplicates. Apex's own services can't be listed yet. |
-| `events` | `{ emits?, on? }` | `emits`: up to 20 names `^[a-z][a-z0-9-]{0,31}$`. `on`: up to 30, each `<pack-id>/<event>` (not this pack's) or `apex.theme`. |
+| `provides` | `[{ service, description (500), methods, module?, agent? }]`, at most 10 | `service` `^[a-z][a-z0-9-]{1,47}$`, not one of Atelier's own names (`ai`, `atelier`, `assets`, `auth`, `cast`, `connectors`, `events`, `files`, `guide`, `kit`, `notify`, `pad`, `rooms`, `status`, `storage`, `world`). `methods`: 1 to 30, names `^[a-z][A-Za-z0-9_]{0,31}$`, each `{ description?, input }` with `input` a JSON Schema object. `module`: a `.js`/`.mjs` file outside app folders. |
+| `uses` | list of service names, at most 20 | Not its own services; no duplicates. Atelier's own services can't be listed yet. |
+| `events` | `{ emits?, on? }` | `emits`: up to 20 names `^[a-z][a-z0-9-]{0,31}$`. `on`: up to 30, each `<pack-id>/<event>` (not this pack's) or `atelier.theme`. |
 | `requires` | `{ packs: { "<pack-id>": "1.2.0" or ">=1.2.0" } }` | Up to 20; both forms mean that version or newer; not itself. |
 
 See [services-and-events.md](services-and-events.md).
@@ -211,7 +211,7 @@ See [services-and-events.md](services-and-events.md).
 
 - **Paths the manifest names**: relative, `/`-separated segments of
   `[A-Za-z0-9._-]` (up to 100 characters each, never only dots), up to 300
-  characters, nothing under `__apex/`.
+  characters, nothing under `__atelier/`.
 - **Files inside an app's folder** (and an asset set's) may also use spaces
   and `& ' ( ) + , ! @ [ ] ~ =`, up to 120 characters a segment and 400 a path.
   Never `# % ?`, a leading or trailing space, a trailing dot or a Windows
@@ -234,7 +234,7 @@ See [services-and-events.md](services-and-events.md).
 
 ```json
 {
-  "format": "apex-pack",
+  "format": "atelier-pack",
   "manifestVersion": 2,
   "id": "team-board",
   "name": "Team board",
@@ -242,7 +242,7 @@ See [services-and-events.md](services-and-events.md).
   "description": "Your team's board, with your own account.",
   "author": { "name": "Contoso IT" },
   "homepage": "https://contoso.example/team-board",
-  "updateUrl": "https://downloads.contoso.example/team-board/latest.apexapp",
+  "updateUrl": "https://downloads.contoso.example/team-board/latest.atelierapp",
   "contributes": {
     "apps": [{
       "id": "main",

@@ -1,8 +1,8 @@
 {
-  "name": "apex-pack-tools",
+  "name": "atelier-pack-tools",
   "private": true,
   "version": "1.0.0",
-  "description": "Build, sign and index Apex packs outside Apex.",
+  "description": "Build, sign and index Atelier packs outside Atelier.",
   "type": "module",
   "dependencies": {
     "fflate": "0.8.3"

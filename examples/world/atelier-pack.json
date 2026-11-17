@@ -1,11 +1,11 @@
 {
-  "format": "apex-pack",
+  "format": "atelier-pack",
   "manifestVersion": 2,
   "id": "riverside",
   "name": "Riverside",
   "version": "1.0.0",
   "description": "A small town by a river: a market square, a jetty and an arcade corner that opens Hello kit.",
-  "author": { "name": "Apex examples" },
+  "author": { "name": "Atelier examples" },
   "contributes": {
     "worlds": ["worlds/riverside.json"]
   }

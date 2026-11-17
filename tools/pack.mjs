@@ -1,29 +1,29 @@
 #!/usr/bin/env node
-// Builds a signed .apexpack from a pack folder (docs/packs.md › Sharing), for
-// packs made outside Apex, such as a community index's starter packs.
+// Builds a signed .atelierpack from a pack folder (docs/packs.md › Sharing), for
+// packs made outside Atelier, such as a community index's starter packs.
 //
-//   node scripts/packs/pack.mjs <folder> <out.apexpack|out.apexapp|out.apexworld> --key <key.pem>
+//   node scripts/packs/pack.mjs <folder> <out.atelierpack|out.atelierapp|out.atelierworld> --key <key.pem>
 //        [--entry <https address the archive will be at> [--image <https address of its picture>] [--category <c>] [--color #rrggbb]]
 //   node scripts/packs/pack.mjs --new-key <key.pem>      make an Ed25519 key (mode 0600)
 //
 // With --entry it also prints the archive's entry for a community index
 // (docs/apps.md › The community index): an app's archive is too big for the
 // index repository, so it goes up as a release asset and the index lists its
-// address and SHA-256. A .env or .npmrc file is never packed, like in Apex.
+// address and SHA-256. A .env or .npmrc file is never packed, like in Atelier.
 //
-// The hash and signature are exactly what Apex checks (src/main/packs/files.ts
+// The hash and signature are exactly what Atelier checks (src/main/packs/files.ts
 // and signing.ts): SHA-256 over the sorted "path NUL sha256(file)" lines,
-// signed with Ed25519, in __apex/signature.json. Keep the key file private and
-// out of every repository; whoever holds it can publish updates people's Apex
-// accepts for packs it signed. Apex itself validates every rule at install.
+// signed with Ed25519, in __atelier/signature.json. Keep the key file private and
+// out of every repository; whoever holds it can publish updates people's Atelier
+// accepts for packs it signed. Atelier itself validates every rule at install.
 import { createHash, createPrivateKey, createPublicKey, generateKeyPairSync, sign } from 'node:crypto'
 import { existsSync, lstatSync, readFileSync, readdirSync, writeFileSync } from 'node:fs'
 import { join, relative, sep } from 'node:path'
 import { zipSync } from 'fflate'
 
-const IGNORED = new Set(['.DS_Store', 'Thumbs.db', '__MACOSX', '.git', '__apex', '.npmrc'])
+const IGNORED = new Set(['.DS_Store', 'Thumbs.db', '__MACOSX', '.git', '__atelier', '.npmrc'])
 const isEnvFile = (name) => /^\.env(\..*)?$/i.test(name)
-// The same rules as Apex's (src/shared/packs.ts): manifest-style paths, and inside an app's folder the names games and build tools use.
+// The same rules as Atelier's (src/shared/packs.ts): manifest-style paths, and inside an app's folder the names games and build tools use.
 const SEGMENT = /^[A-Za-z0-9._-]{1,100}$/
 const ASSET_SEGMENT = /^[A-Za-z0-9._\-+=,!@&'()[\]~ ]{1,120}$/
 const WINDOWS_DEVICE = /^(con|prn|aux|nul|com[0-9]|lpt[0-9])(\..*)?$/i
@@ -53,10 +53,10 @@ const flag = (name) => {
   return at >= 0 ? (args[at + 1] ?? null) : null
 }
 const keyFile = flag('--key')
-if (!folder || !out || !keyFile) fail('Usage: node scripts/packs/pack.mjs <folder> <out.apexpack|out.apexapp|out.apexworld> --key <key.pem> [--entry <https url>]')
-if (!/\.(apexpack|apexapp|apexworld)$/i.test(out)) fail(`${out} should end in .apexpack, .apexapp (a pack with an app) or .apexworld (a pack of worlds).`)
-const manifestFile = join(folder, 'apex-pack.json')
-if (!existsSync(manifestFile)) fail(`${folder} has no apex-pack.json.`)
+if (!folder || !out || !keyFile) fail('Usage: node scripts/packs/pack.mjs <folder> <out.atelierpack|out.atelierapp|out.atelierworld> --key <key.pem> [--entry <https url>]')
+if (!/\.(atelierpack|atelierapp|atelierworld)$/i.test(out)) fail(`${out} should end in .atelierpack, .atelierapp (a pack with an app) or .atelierworld (a pack of worlds).`)
+const manifestFile = join(folder, 'atelier-pack.json')
+if (!existsSync(manifestFile)) fail(`${folder} has no atelier-pack.json.`)
 const appRoots = (() => {
   try {
     const apps = JSON.parse(readFileSync(manifestFile, 'utf8')).contributes?.apps ?? []
@@ -92,7 +92,7 @@ const hash = sha256([...files.keys()].sort().map((p) => `${p}\u0000${sha256(file
 const privateKey = createPrivateKey(readFileSync(keyFile))
 const publicDer = createPublicKey(privateKey).export({ format: 'der', type: 'spki' })
 const signature = {
-  format: 'apex-pack-signature',
+  format: 'atelier-pack-signature',
   version: 1,
   hash,
   keyId: sha256(publicDer).slice(0, 16),
@@ -102,10 +102,10 @@ const signature = {
 
 const entries = {}
 for (const p of [...files.keys()].sort()) entries[p] = [new Uint8Array(files.get(p)), { level: 6 }]
-entries['__apex/signature.json'] = [new TextEncoder().encode(JSON.stringify(signature, null, 2)), { level: 6 }]
+entries['__atelier/signature.json'] = [new TextEncoder().encode(JSON.stringify(signature, null, 2)), { level: 6 }]
 const archive = Buffer.from(zipSync(entries))
 writeFileSync(out, archive)
-const manifest = JSON.parse(files.get('apex-pack.json').toString('utf8'))
+const manifest = JSON.parse(files.get('atelier-pack.json').toString('utf8'))
 console.log(`Wrote ${out}: ${manifest.id} ${manifest.version}, ${files.size} files, signed by ${signature.keyId}.`)
 
 // The archive's entry for a community index, to paste into its "packs" list.

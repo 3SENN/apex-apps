@@ -28,7 +28,7 @@ Go through this before you share a pack, and again before each new version.
 - [ ] No `.env` in the pack; a `.env.example` with placeholders in your repo.
 - [ ] `env` holds only public values.
 - [ ] Your own server checks the person's token or sign-in on every request.
-- [ ] Your server answers CORS for `apex-pack://<id>` only (or `*` if it is a
+- [ ] Your server answers CORS for `atelier-pack://<id>` only (or `*` if it is a
       public API), including `OPTIONS`.
 
 ## Files
@@ -50,15 +50,15 @@ Go through this before you share a pack, and again before each new version.
 - [ ] Nothing keeps running when the app is closed; later reminders use
       scheduled notifications.
 - [ ] Light and dark, keyboard and a narrow window all work.
-- [ ] `apex.test?.ready(state)` reports what matters.
+- [ ] `atelier.test?.ready(state)` reports what matters.
 - [ ] The pack's log is clean after a normal session.
 
 ## Signing and the file
 
 - [ ] Signed with your usual key (`tools/pack.mjs --key`). Same key as every
       earlier version.
-- [ ] The right extension: `.apexapp` (with an app), `.apexworld` (only
-      worlds), `.apexpack` (anything else).
+- [ ] The right extension: `.atelierapp` (with an app), `.atelierworld` (only
+      worlds), `.atelierpack` (anything else).
 - [ ] Installed from the file itself, not the folder, and opened once.
 
 ## Listing it

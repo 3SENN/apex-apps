@@ -9,7 +9,7 @@ app.innerHTML = '<div class="ax-stack">'
   + '<section class="join ax-card"><img class="qr" alt="QR code to join" hidden>'
   + '<div class="ax-stack"><p class="ax-subtitle" id="say">Starting…</p><p class="address ax-muted" id="address"></p>'
   + '<ol class="steps ax-small"><li>Join the same Wi-Fi as this computer.</li><li>Scan the code with the phone’s camera, or type the address.</li>'
-  + '<li>The first time, the phone warns about the certificate: choose to go on (it is Apex’s own, on this computer).</li><li>Tap Allow motion, then tilt the phone.</li></ol></div></section>'
+  + '<li>The first time, the phone warns about the certificate: choose to go on (it is Atelier’s own, on this computer).</li><li>Tap Allow motion, then tilt the phone.</li></ol></div></section>'
   + '<section class="players" id="players" aria-live="polite"></section></div>'
 const qr = app.querySelector('.qr')
 const say = document.getElementById('say')
@@ -39,11 +39,11 @@ function render() {
     if (phone.moved) phone.el.querySelector('.angles').textContent = 'Tilt ' + Math.round(phone.beta) + '°, ' + Math.round(phone.gamma) + '° · swing ' + phone.swing.toFixed(0)
     for (const key of phone.el.querySelectorAll('.key')) key.classList.toggle('down', phone.held.has(key.dataset.key))
   }
-  apex.test?.ready({ serving: Boolean(status), phones: phones.size })
+  atelier.test?.ready({ serving: Boolean(status), phones: phones.size })
   requestAnimationFrame(render)
 }
 
-apex.server.onConnection((socket) => {
+atelier.server.onConnection((socket) => {
   const phone = { socket, name: socket.query.name || 'Phone', beta: 0, gamma: 0, swing: 0, moved: false, held: new Set(), el: null }
   phone.el = card(phone)
   phones.set(socket.id, phone)
@@ -68,7 +68,7 @@ apex.server.onConnection((socket) => {
   })
 })
 
-apex.server.onStop((reason) => {
+atelier.server.onStop((reason) => {
   status = null
   qr.hidden = true
   say.textContent = reason === 'person' ? 'Sharing stopped. Reload to share again.' : 'The server stopped.'
@@ -77,9 +77,9 @@ apex.server.onStop((reason) => {
 // On the Wi-Fi when it can be (in test_pack, on this computer only).
 let status = null
 try {
-  status = await apex.server.start({ lan: true, root: 'phone' })
+  status = await atelier.server.start({ lan: true, root: 'phone' })
 } catch {
-  status = await apex.server.start({ root: 'phone' }).catch((err) => {
+  status = await atelier.server.start({ root: 'phone' }).catch((err) => {
     say.textContent = err.message
     return null
   })

@@ -1,7 +1,7 @@
 # Your own servers, keys and sign-in
 
 Apps reach their own servers and the person's own accounts directly, without
-Apex in the middle and without a key ever being in the pack.
+Atelier in the middle and without a key ever being in the pack.
 
 ## Reaching a server
 
@@ -16,8 +16,8 @@ An app's pages then connect straight to them with `fetch`, `WebSocket`,
 
 - https and wss, on any port; http and ws only to `localhost` and
   `127.0.0.1`.
-- **Normal CORS.** The page's origin is `apex-pack://<pack id>`. Your server
-  answers with `Access-Control-Allow-Origin: apex-pack://<pack id>` (or `*`),
+- **Normal CORS.** The page's origin is `atelier-pack://<pack id>`. Your server
+  answers with `Access-Control-Allow-Origin: atelier-pack://<pack id>` (or `*`),
   and answers the preflight (`OPTIONS`) that a request with a JSON body or its
   own headers triggers. This is what lets ordinary clients (a REST or GraphQL
   client, socket.io, a backend's own SDK) run unchanged.
@@ -25,14 +25,14 @@ An app's pages then connect straight to them with `fetch`, `WebSocket`,
 - Scripts, styles, fonts and frames still come only from the pack. WebRTC is
   not available.
 - Hosts in `optionalPermissions.network` stay closed until the person grants
-  them (`apex.permissions.request`), and close again if they take the grant
+  them (`atelier.permissions.request`), and close again if they take the grant
   back.
 
 A minimal server answer, in Node:
 
 ```js
 const cors = {
-  'Access-Control-Allow-Origin': 'apex-pack://server-notes',
+  'Access-Control-Allow-Origin': 'atelier-pack://server-notes',
   'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type, Authorization',
   Vary: 'Origin',
@@ -43,9 +43,9 @@ res.writeHead(200, { ...cors, 'Content-Type': 'application/json' }).end(JSON.str
 
 The full example is [server-app/server.mjs](../examples/server-app/server.mjs).
 
-**`apex.fetch`** is the other way: it runs inside Apex, not the page, so it
+**`atelier.fetch`** is the other way: it runs inside Atelier, not the page, so it
 needs no CORS, sends no cookies and returns text (up to 5 MB, 20 s). Panels and
-tools can only use `apex.fetch`; apps can use either.
+tools can only use `atelier.fetch`; apps can use either.
 
 ## A pack is public, so no key goes in it
 
@@ -54,7 +54,7 @@ for all of them.
 
 - **Your own keys** (your database, your payment provider, the model API your
   server calls) stay on your server. The app talks to your server.
-- Apex refuses a pack with a `.env` file anywhere in it. Export and Share…
+- Atelier refuses a pack with a `.env` file anywhere in it. Export and Share…
   also refuse files with text in a known key format, and `env` values that
   look like keys.
 - Keys meant to be public pass: a Firebase web `apiKey`, a Maps browser key, a
@@ -80,23 +80,23 @@ for a service, a token for their company's API), declare it:
 - The review says: "Asks you for Acme API key and sends it only to
   api.acme.example (the pack's code never sees it)". An update that sends a
   key to a new host asks again.
-- The person enters it on the pack's page, under **Keys**. Apex keeps it in
+- The person enters it on the pack's page, under **Keys**. Atelier keeps it in
   the system keychain, never in the pack's storage, and removes it with the
   pack.
-- Apex puts it in that header on every request to those hosts: the app's own
-  `fetch`, a WebSocket's handshake, images, `apex.fetch`. It replaces whatever
+- Atelier puts it in that header on every request to those hosts: the app's own
+  `fetch`, a WebSocket's handshake, images, `atelier.fetch`. It replaces whatever
   the page set there. On a request to any other host the header is taken out,
   so a redirect never carries the key on.
 - Your code only learns **whether** there is one:
 
 ```js
 async function things() {
-  const { ACME_KEY } = await apex.secrets.status() // true or false
+  const { ACME_KEY } = await atelier.secrets.status() // true or false
   if (!ACME_KEY) {
-    const { set } = await apex.secrets.request('ACME_KEY') // opens the pack's page at that key
+    const { set } = await atelier.secrets.request('ACME_KEY') // opens the pack's page at that key
     if (!set) return null // say why the app needs it, and offer the button again
   }
-  const res = await fetch('https://api.acme.example/v1/things') // no Authorization header: Apex adds it
+  const res = await fetch('https://api.acme.example/v1/things') // no Authorization header: Atelier adds it
   return res.json()
 }
 ```
@@ -111,14 +111,14 @@ async function things() {
 
 Values that aren't secret but differ between builds or installs (a server's
 address, a feature switch) go in `env`, and every page of the pack reads them
-as `apex.env`:
+as `atelier.env`:
 
 ```json
 "env": { "SERVER_URL": "https://api.contoso.example", "REALTIME": "on" }
 ```
 
 ```js
-const res = await fetch(`${apex.env.SERVER_URL}/notes`)
+const res = await fetch(`${atelier.env.SERVER_URL}/notes`)
 ```
 
 At most 50 values of up to 2,000 characters, named like secrets and never the
@@ -139,7 +139,7 @@ A pack loaded with **Load a folder…**:
 - reloads when you edit `.env`, like any other file.
 
 Neither file is ever packed: Load a folder and `pack.mjs` skip every `.env`
-file, and Apex refuses a pack that holds one. Commit a `.env.example` with
+file, and Atelier refuses a pack that holds one. Commit a `.env.example` with
 placeholders instead (see [server-app](../examples/server-app)).
 
 A secret still goes only to its own hosts, also in development. A secret for
@@ -149,7 +149,7 @@ your local server.
 ## Sign-in: `auth`
 
 For an account the person signs in with (a company's Entra ID, Okta, Google,
-Keycloak, or any OAuth 2 / OpenID Connect provider), let Apex run the sign-in:
+Keycloak, or any OAuth 2 / OpenID Connect provider), let Atelier run the sign-in:
 
 ```json
 "permissions": { "network": ["api.contoso.example"] },
@@ -164,13 +164,13 @@ Keycloak, or any OAuth 2 / OpenID Connect provider), let Apex run the sign-in:
 ```
 
 ```js
-const { corp } = await apex.auth.status()      // { signedIn, user }
-if (!corp.signedIn) await apex.auth.signIn('corp') // opens the provider in a tab
-const res = await fetch('https://api.contoso.example/v1/tasks') // Apex adds Authorization: Bearer <token>
-await apex.auth.signOut('corp')                // forgets the tokens here
+const { corp } = await atelier.auth.status()      // { signedIn, user }
+if (!corp.signedIn) await atelier.auth.signIn('corp') // opens the provider in a tab
+const res = await fetch('https://api.contoso.example/v1/tasks') // Atelier adds Authorization: Bearer <token>
+await atelier.auth.signOut('corp')                // forgets the tokens here
 ```
 
-What Apex does:
+What Atelier does:
 
 - Finds the provider from `issuer`: its metadata under
   `/.well-known/oauth-authorization-server` or
@@ -182,7 +182,7 @@ What Apex does:
 - Keeps the tokens in the system keychain and refreshes the access token when
   it is due (when the provider gave a refresh token).
 - Adds `Authorization: Bearer <access token>` to the app's requests to the
-  sign-in's `hosts` (fetch, WebSocket handshakes, images, `apex.fetch`), and
+  sign-in's `hosts` (fetch, WebSocket handshakes, images, `atelier.fetch`), and
   takes it off a request to any other host.
 - `user` is the email, username or name from the ID token (the first it has).
 - Call `signIn` from a click. If the person closes the sign-in tab, asking
@@ -205,7 +205,7 @@ sign-in and a secret in `Authorization` (send a key in its own header, such as
 
 The review says: "Signs you in to login.contoso.example and sends that sign-in
 to api.contoso.example". An update that changes the issuer or the hosts asks
-again. Apex's playtest never signs in.
+again. Atelier's playtest never signs in.
 
 **One app, many companies.** An organisation can set its own `issuer`,
 `clientId` and `scopes` for your sign-in with the `AppConfig` policy, so one
@@ -215,7 +215,7 @@ published app signs in to each company's own tenant. See
 ## Checklist
 
 - [ ] Every host the app talks to is in `network` (or optional and asked for).
-- [ ] Your server answers CORS for `apex-pack://<id>`, including `OPTIONS`.
+- [ ] Your server answers CORS for `atelier-pack://<id>`, including `OPTIONS`.
 - [ ] No key, token or password in any file; `.env` in `.gitignore`.
 - [ ] Keys the person brings are `secrets`, bound to the one service each is for.
 - [ ] Sign-in uses a public client with the loopback redirect on any port.

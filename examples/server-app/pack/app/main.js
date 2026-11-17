@@ -1,10 +1,10 @@
 // Server notes: reads and adds notes on the app's own server, with plain
-// fetch and normal CORS (the page's origin is apex-pack://server-notes).
+// fetch and normal CORS (the page's origin is atelier-pack://server-notes).
 //
-// - SERVER_URL comes from apex.env: the manifest's value, or .env while you develop.
-// - The person's token is a secret. Apex adds it to requests to the secret's
+// - SERVER_URL comes from atelier.env: the manifest's value, or .env while you develop.
+// - The person's token is a secret. Atelier adds it to requests to the secret's
 //   hosts; this code never sees it and never sets the Authorization header.
-const base = apex.env.SERVER_URL
+const base = atelier.env.SERVER_URL
 const tokenState = document.getElementById('token-state')
 const tokenButton = document.getElementById('token')
 const form = document.getElementById('add')
@@ -21,7 +21,7 @@ function say(text, canRetry = false) {
 }
 
 async function showToken() {
-  const { NOTES_TOKEN } = await apex.secrets.status()
+  const { NOTES_TOKEN } = await atelier.secrets.status()
   tokenState.textContent = NOTES_TOKEN ? 'Your Contoso Notes token is added.' : 'No Contoso Notes token yet.'
   tokenButton.hidden = NOTES_TOKEN
   return NOTES_TOKEN
@@ -29,7 +29,7 @@ async function showToken() {
 
 async function addToken() {
   // Opens the pack's page at this key; resolves once the person saves it (or gives up).
-  const { set } = await apex.secrets.request('NOTES_TOKEN')
+  const { set } = await atelier.secrets.request('NOTES_TOKEN')
   await showToken()
   if (set) await load()
 }
@@ -45,7 +45,7 @@ function render(notes) {
   )
   count = notes.length
   say(notes.length ? '' : 'No notes yet. Add the first one.')
-  apex.test?.ready({ notes: count })
+  atelier.test?.ready({ notes: count })
 }
 
 // One place for every request: a sentence and a way forward for each failure.
@@ -89,6 +89,6 @@ form.addEventListener('submit', async (event) => {
 tokenButton.addEventListener('click', () => void addToken())
 retry.addEventListener('click', () => void load())
 
-apex.test?.ready({ notes: count })
+atelier.test?.ready({ notes: count })
 await showToken()
 await load()

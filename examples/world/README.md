@@ -16,20 +16,20 @@ What it shows:
   `tint.accent` recolours it.
 - Places: named areas. The arcade corner `opens` Hello kit
   (`{ "pack": "hello-kit", "app": "main" }`). A place may open any pack's
-  app; if the visitor doesn't have it, Apex offers to get it.
+  app; if the visitor doesn't have it, Atelier offers to get it.
 - Residents: two guests (a name, a look and a short personality, never memory
   or instructions) and one open spot (`"companion": "local"`).
-- In the app a place opens, `apex.world.context()` returns the world, the
+- In the app a place opens, `atelier.world.context()` returns the world, the
   place and the cast: the visitor first, then the residents there.
 
-A pack that holds only worlds travels as `.apexworld`. The review says it adds
+A pack that holds only worlds travels as `.atelierworld`. The review says it adds
 a world to walk around in.
 
 ## Try it
 
 1. Load [../hello-kit](../hello-kit) (Packs › **Load a folder…**), then this
    folder.
-2. Open Riverside from the pack's page (Open turns on Apex's Worlds app).
+2. Open Riverside from the pack's page (Open turns on Atelier's Worlds app).
 3. Walk into the arcade corner and step in: Hello kit opens with your
    companion as its cast, and names the companion in the open spot (if you
    have a second one).

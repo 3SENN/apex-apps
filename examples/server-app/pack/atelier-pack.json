@@ -1,11 +1,11 @@
 {
-  "format": "apex-pack",
+  "format": "atelier-pack",
   "manifestVersion": 2,
   "id": "server-notes",
   "name": "Server notes",
   "version": "1.0.0",
   "description": "Your notes from your Contoso Notes account: read them and add new ones.",
-  "author": { "name": "Apex examples" },
+  "author": { "name": "Atelier examples" },
   "contributes": {
     "apps": [
       {
