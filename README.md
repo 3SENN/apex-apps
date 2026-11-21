@@ -27,7 +27,7 @@ runs, what it can reach, how it shows up in the browser and how it travels.
 | An app that uses the person's AI | `atelier.ai` on the person's own engine: no API key in your app | [notes-tool](examples/notes-tool) |
 | The person's companions as characters | the **cast** and the **Atelier kit** (three.js plus the companion runtime) | [hello-kit](examples/hello-kit) |
 | An app on your own server, or the person's own accounts | `network`, `secrets`, `env` and `auth` | [server-app](examples/server-app), [company-dashboard](examples/company-dashboard) |
-| Phones as controllers, a second screen, local multiplayer | `atelier.server`: a small server the app runs, on this computer or the Wi-Fi | [phone-controller](examples/phone-controller) |
+| Phones as controllers, a second screen, local multiplayer | `atelier.server`: a small server the app runs, on this computer or the Wi-Fi | [phone-controller](examples/phone-controller), [Highgames](https://github.com/3SENN/highgames) |
 | A place to walk around in | a **world**: JSON with kit props, residents and places that open apps | [world](examples/world) |
 | New art or sound for someone's app | an **asset pack** that fills one of the app's slots | [winter-art](examples/winter-art) |
 | A tool for your company | an app with sign-in and connectors, deployed by policy | [company-dashboard](examples/company-dashboard), [organisations](docs/organisations.md) |
@@ -105,6 +105,13 @@ Every example passes Atelier's manifest checks (`vite-app` once it is built).
 | [company-dashboard](examples/company-dashboard) | OAuth sign-in, connectors, `env`, and the policy that deploys it |
 | [world](examples/world) | A world pack |
 | [winter-art](examples/winter-art) | An asset pack for Hello kit |
+
+### A whole game
+
+[Highgames](https://github.com/3SENN/highgames) is a complete Atelier game to learn from: a party game for 1 to 4
+players with phones as controllers (`atelier.server` on the Wi-Fi), companions as players (the cast and the kit), a
+bundled Vite build, an emulator for development and end-to-end tests. Every minigame is two small files, and its
+README shows how to add one.
 
 [`index/example-index.json`](index/example-index.json) is a sample
 community index (its addresses and hashes are made up).
